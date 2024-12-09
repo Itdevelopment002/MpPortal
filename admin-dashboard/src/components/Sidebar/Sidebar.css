@@ -49,6 +49,7 @@
 .sidebar {
   scrollbar-width: none; 
   scrollbar-color: rgba(0, 0, 0, 0.1) transparent; 
+  font-weight: 600;
 }
 
 .sidebar:hover::-webkit-scrollbar-thumb {

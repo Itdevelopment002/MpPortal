@@ -3,14 +3,11 @@ import img from "../../assets/img/user.jpg";
 import { Link } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Header.css";
-import api from "../api";
 
 const Header = ({ onLogout, userDepartment }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // eslint-disable-next-line
   const [isScreenLarge, setIsScreenLarge] = useState(window.innerWidth > 990);
-  const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] =
-    useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -40,7 +37,6 @@ const Header = ({ onLogout, userDepartment }) => {
         !event.target.closest(".dropdown-toggle") &&
         !event.target.closest(".dropdown-menu")
       ) {
-        setIsNotificationDropdownOpen(false);
         setIsUserDropdownOpen(false);
       }
     };
@@ -48,6 +44,14 @@ const Header = ({ onLogout, userDepartment }) => {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
+
+
+  const [activeDropdownItem, setActiveDropdownItem] = useState(null);
+
+  const handleDropdownItemClick = (item) => {
+    setActiveDropdownItem(item);
+  };
+
 
   return (
     <>
@@ -66,7 +70,7 @@ const Header = ({ onLogout, userDepartment }) => {
         <div className="header">
           <div className="header-left">
             <Link to="#." className="logo">
-              MP
+              MP PORTAL
             </Link>
           </div>
           <Link
@@ -90,7 +94,6 @@ const Header = ({ onLogout, userDepartment }) => {
                 onClick={(e) => {
                   e.preventDefault();
                   setIsUserDropdownOpen((prev) => !prev);
-                  setIsNotificationDropdownOpen(false);
                 }}
               >
                 <span className="user-img">
@@ -108,18 +111,35 @@ const Header = ({ onLogout, userDepartment }) => {
               </Link>
               {isUserDropdownOpen && (
                 <div className="dropdown-menu show dropdown-keep-visible">
-                  <Link className="dropdown-item" to="#.">
+                  <Link
+                    className={`dropdown-item ${activeDropdownItem === "My Profile" ? "active" : ""}`}
+                    to="#."
+                    onClick={() => handleDropdownItemClick("My Profile")}
+                  >
                     My Profile
                   </Link>
-                  <Link className="dropdown-item" to="#.">
+                  <Link
+                    className={`dropdown-item ${activeDropdownItem === "Edit Profile" ? "active" : ""}`}
+                    to="#."
+                    onClick={() => handleDropdownItemClick("Edit Profile")}
+                  >
                     Edit Profile
                   </Link>
-                  <Link className="dropdown-item" to="#.">
+                  <Link
+                    className={`dropdown-item ${activeDropdownItem === "Settings" ? "active" : ""}`}
+                    to="#."
+                    onClick={() => handleDropdownItemClick("Settings")}
+                  >
                     Settings
                   </Link>
-                  <Link className="dropdown-item" onClick={onLogout}>
+                  <Link
+                    className={`dropdown-item ${activeDropdownItem === "Logout" ? "active" : ""}`}
+                    to="#."
+                    onClick={onLogout}
+                  >
                     Logout
                   </Link>
+
                 </div>
               )}
             </li>
@@ -138,18 +158,38 @@ const Header = ({ onLogout, userDepartment }) => {
               </Link>
               {isUserDropdownOpen && (
                 <div className="dropdown-menu dropdown-menu-right show mx-2 dropdown-keep-visible">
-                  <Link className="dropdown-item" to="#.">
+                  <Link
+                    className={`dropdown-item ${activeDropdownItem === "My Profile" ? "active" : ""}`}
+                    to="#."
+                    onClick={() => handleDropdownItemClick("My Profile")}
+                  >
                     My Profile
                   </Link>
-                  <Link className="dropdown-item" to="#.">
+                  <Link
+                    className={`dropdown-item ${activeDropdownItem === "Edit Profile" ? "active" : ""}`}
+                    to="#."
+                    onClick={() => handleDropdownItemClick("Edit Profile")}
+                  >
                     Edit Profile
                   </Link>
-                  <Link className="dropdown-item" to="#.">
+                  <Link
+                    className={`dropdown-item ${activeDropdownItem === "Settings" ? "active" : ""}`}
+                    to="#."
+                    onClick={() => handleDropdownItemClick("Settings")}
+                  >
                     Settings
                   </Link>
-                  <Link className="dropdown-item" onClick={onLogout}>
+                  <Link
+                    className={`dropdown-item ${activeDropdownItem === "Logout" ? "active" : ""}`}
+                    to="#."
+                    onClick={() => {
+                      handleDropdownItemClick("Logout");
+                      onLogout();
+                    }}
+                  >
                     Logout
                   </Link>
+
                 </div>
               )}
             </div>

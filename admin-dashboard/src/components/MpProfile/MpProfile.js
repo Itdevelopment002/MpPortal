@@ -108,11 +108,11 @@ const MpProfile = () => {
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th>Sr. No.</th>
+                          <th width='7%'>Sr. No.</th>
                           <th>Name</th>
                           <th>Designation</th>
                           <th>Description</th>
-                          <th>Profile Image</th>
+                          <th width='11%'>Profile Image</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -120,9 +120,9 @@ const MpProfile = () => {
                         {mpProfile.map((profile, index) => (
                           <tr key={profile.id}>
                             <td>{index + 1}</td>
-                            <td>{profile.name}</td>
-                            <td>{profile.designation}</td>
-                            <td>{profile.info}</td>
+                            <td className="mpprofile-items">{profile.name}</td>
+                            <td className="mpprofile-items">{profile.designation}</td>
+                            <td className="mpprofile-items">{profile.info}</td>
                             <td>
                               <Link
                                 to={`http://localhost:5000${profile.image_path}`}

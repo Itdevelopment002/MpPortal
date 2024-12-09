@@ -1,37 +1,134 @@
+/* General Header Styling */
+.header {
+  background-color: #2C3E50 !important; /* Dark blue-gray background */
+  color: #ECF0F1 !important; /* Light gray text color */
+  border-bottom: 3px solid #1A252F !important; /* Darker accent border */
+}
+
+.header .logo {
+  font-size: 20px !important;
+  color: #ECF0F1 !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+}
+
+.header .mobile_btn {
+  color: #ECF0F1 !important;
+  font-size: 18px !important;
+}
+
+/* User Menu Styling */
+.user-menu {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.user-menu .user-link {
+  display: flex !important;
+  align-items: center !important;
+  color: #ECF0F1 !important;
+  text-decoration: none !important;
+}
+
+.user-menu .user-link .user-img {
+  display: flex !important;
+  align-items: center !important;
+  position: relative !important;
+}
+
+.user-menu .user-link .user-img .status.online {
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  background: #2ECC71 !important; /* Bright green for online */
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  border: 2px solid #ECF0F1 !important;
+}
+
+.user-menu .dropdown-menu {
+  background-color: #34495E !important; /* Dark blue background */
+  border: 1px solid #2C3E50 !important; /* Border matching header */
+  border-radius: 5px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+  min-width: 180px !important;
+  z-index: 1000 !important;
+}
+
+.user-menu .dropdown-menu a {
+  color: #ECF0F1 !important; /* Light gray link color */
+  padding: 10px 15px !important;
+  display: block !important;
+  text-decoration: none !important;
+  transition: background-color 0.3s, color 0.3s !important;
+}
+
+.user-menu .dropdown-menu a:hover {
+  background-color: transparent !important;
+  color: #1ABC9C !important;
+}
+
+.user-menu .dropdown-menu a.active {
+  background-color: #1A252F !important; /* Dark hover */
+  color: #1ABC9C !important; /* Teal hover text */
+  border-radius: 7px !important;
+
+}
+
+
+/* Mobile User Menu */
+.mobile-user-menu .dropdown-menu {
+  right: 10px !important;
+  left: auto !important;
+  top: 40px !important;
+  background-color: #34495E !important;
+}
+
+/* Sidebar Toggle Button */
+#mobile_btn {
+  color: #ECF0F1 !important;
+  background: none !important;
+  border: none !important;
+  font-size: 20px !important;
+}
+
+#mobile_btn:hover {
+  color: #1ABC9C !important; /* Teal hover */
+}
+
+/* Dropdown Menu Alignment */
 .dropdown-menu.dropdown-keep-visible {
-    right: 5px;
-    left: auto;
-    position: absolute;
-  }
-
-  .notification-keep-visible{
-    right: 0;
-    left: auto;
-    position: absolute;
-  }
-  
-  .notification-message.unread {
-    background-color: #e0f7fa; /* Light blue color for unread notifications */
-    border-left: 4px solid #0288d1; /* Blue border to indicate unread notification */
-  }
-  
-  .notification-message.unread:hover {
-    background-color: #b3e5fc; /* Slightly darker blue on hover */
-  }
-  
-  .notification-message {
-    transition: background-color 0.3s ease-in-out; /* Smooth transition for background change */
-  }
-  
-.btn-close {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-  cursor: pointer;
-  color: rgb(94, 93, 93);
+  right: 5px !important;
+  left: auto !important;
+  position: absolute !important;
 }
 
-.btn-close:hover {
-  color: #d00000; /* Darker red for hover state */
-  border:none;
+/* Mobile Responsiveness */
+@media (max-width: 990px) {
+  .user-menu {
+      flex-direction: column !important;
+  }
+
+  .user-menu .user-link {
+      font-size: 14px !important;
+  }
+
+  #mobile_btn {
+      font-size: 16px !important;
+  }
+  .dropdown-menu.dropdown-keep-visible {
+    right: 0px !important;
+  }
 }
+
+/* a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: #1ABC9C !important;
+} */
