@@ -1,0 +1,25 @@
+/* .bg-lightblue {
+    background-color: #e6f7ff; 
+  } */
+
+  .bg-light-blue {
+    background-color: #e3f2fd; /* A light blue shade */
+  }
+  /* Custom scrollbar styling */
+.custom-scrollbar {
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: rgb(114, 146, 188) transparent; /* For Firefox */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent; /* Background of the scrollbar track */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(114, 146, 188); /* Scrollbar color */
+    border-radius: 4px; /* Rounded corners for the scrollbar */
+}
