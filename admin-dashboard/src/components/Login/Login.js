@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import "./Login.css";
 import img from "../../assets/img/login/congress-logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import api from "../api";
 
 const Login = ({ onLogin }) => {
-  const navigate = useNavigate();
   const [userData, setData] = useState({
     username: "",
     password: "",
@@ -39,7 +38,7 @@ const Login = ({ onLogin }) => {
     }
 
     try {
-      const endpoint = "/login";
+      const endpoint = "/";
       const response = await api.post(endpoint, userData);
       localStorage.setItem("authToken", response.data.uniqueId);
       onLogin();

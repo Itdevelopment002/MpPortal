@@ -156,13 +156,13 @@ const PhotoGallery = () => {
                             <td>{gallery.photo_name}</td>
                             <td>
                               <Link
-                                to={`${baseURL}${gallery.file_path}`}
+                                to={`http://localhost:5000${gallery.file_path}`}
                                 className="glightbox"
                                 data-gallery="gallery-images"
                               >
                                 <img
                                   width="100px"
-                                  src={`${baseURL}${gallery.file_path}`}
+                                  src={`http://localhost:5000${gallery.file_path}`}
                                   alt={`gallery${index + 1}`}
                                 />
                               </Link>

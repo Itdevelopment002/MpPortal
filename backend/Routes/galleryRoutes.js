@@ -112,9 +112,16 @@ router.delete('/gallerys/:id', (req, res) => {
                 return res.status(500).json({ message: 'Database error', error: err });
             }
 
-            fs.unlink(path.join(__dirname, '..', filePath), (fsErr) => {
-                if (fsErr) {
-                    console.error('Error deleting file:', fsErr);
+            const fullPath = path.join(__dirname, '..', filePath);
+            fs.access(fullPath, fs.constants.F_OK, (accessErr) => {
+                if (accessErr) {
+                    console.warn(`File not found, skipping deletion: ${fullPath}`);
+                } else {
+                    fs.unlink(fullPath, (unlinkErr) => {
+                        if (unlinkErr) {
+                            console.error('Error deleting file:', unlinkErr);
+                        }
+                    });
                 }
             });
 
@@ -123,9 +130,10 @@ router.delete('/gallerys/:id', (req, res) => {
     });
 });
 
+
 router.put('/gallerys/:id', upload.single('image'), (req, res) => {
     const { id } = req.params;
-    const { photo_name } = req.body; 
+    const { photo_name } = req.body;
 
     let updateSql = 'UPDATE gallery SET';
     const updateParams = [];
@@ -137,7 +145,7 @@ router.put('/gallerys/:id', upload.single('image'), (req, res) => {
 
     if (req.file) {
         const newFilePath = `/uploads/${req.file.filename}`;
-        updateSql += updateParams.length > 0 ? ', file_path = ?' : ' file_path = ?'; 
+        updateSql += updateParams.length > 0 ? ', file_path = ?' : ' file_path = ?';
         updateParams.push(newFilePath);
     }
 
@@ -166,17 +174,25 @@ router.put('/gallerys/:id', upload.single('image'), (req, res) => {
             }
 
             if (req.file) {
-                fs.unlink(path.join(__dirname, '..', oldFilePath), (fsErr) => {
-                    if (fsErr) {
-                        console.error('Error deleting old file:', fsErr);
+                const fullPath = path.join(__dirname, '..', oldFilePath);
+                fs.access(fullPath, fs.constants.F_OK, (accessErr) => {
+                    if (accessErr) {
+                        console.warn(`Old file not found, skipping deletion: ${fullPath}`);
+                    } else {
+                        fs.unlink(fullPath, (unlinkErr) => {
+                            if (unlinkErr) {
+                                console.error('Error deleting old file:', unlinkErr);
+                            }
+                        });
                     }
                 });
             }
 
-            res.status(200).json({ message: 'gallery updated successfully' });
+            res.status(200).json({ message: 'Gallery updated successfully' });
         });
     });
 });
+
 
 
 module.exports = router;
