@@ -118,13 +118,13 @@ const LoginForm = () => {
                             <td>{form.title}</td>
                             <td>
                               <Link
-                                to={`${baseURL}${form.image_path}`}
+                                to={`http://localhost:5000${form.image_path}`}
                                 className="glightbox"
                                 data-gallery="slider-images"
                               >
                                 <img
                                   width="50px"
-                                  src={`${baseURL}${form.image_path}`}
+                                  src={`http://localhost:5000${form.image_path}`}
                                   alt={`form-img${form.image_path}`}
                                 />
                               </Link>

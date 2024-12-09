@@ -121,13 +121,13 @@ const LoginProfile = () => {
                             <td>{profile.designation}</td>
                             <td>
                               <Link
-                                to={`${baseURL}${profile.image_path}`}
+                                to={`http://localhost:5000${profile.image_path}`}
                                 className="glightbox"
                                 data-gallery="slider-images"
                               >
                                 <img
                                   width="50px"
-                                  src={`${baseURL}${profile.image_path}`}
+                                  src={`http://localhost:5000${profile.image_path}`}
                                   alt={`profile-img${profile.image_path}`}
                                 />
                               </Link>

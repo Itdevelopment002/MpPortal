@@ -8,7 +8,7 @@ const generateUniqueId = (req, res, next) => {
   next();
 };
 
-router.post("/login", generateUniqueId, (req, res) => {
+router.post("/", generateUniqueId, (req, res) => {
   const { username, password } = req.body;
 
   const query =

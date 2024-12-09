@@ -34,7 +34,6 @@ const indianStates = [
   "West Bengal",
 ];
 
-
 const HeaderModel = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editHeaderData, setEditHeaderData] = useState({
@@ -166,13 +165,17 @@ const HeaderModel = () => {
                             <td>{header.govtname}</td>
                             <td>
                               <Link
-                                to={`${baseURL}${header.websitelogo}`}
+                                to={`${baseURL.replace(/\/$/, "")}${
+                                  header.websitelogo
+                                }`}
                                 className="glightbox"
                                 data-gallery="web-links-gallery"
                               >
                                 <img
                                   width="100px"
-                                  src={`${baseURL}${header.websitelogo}`}
+                                  src={`${baseURL.replace(/\/$/, "")}${
+                                    header.websitelogo
+                                  }`}
                                   alt={header.id}
                                   style={{ borderRadius: "5px" }}
                                 />

@@ -115,9 +115,16 @@ router.delete("/sliders/:id", (req, res) => {
         return res.status(500).json({ message: "Database error", error: err });
       }
 
-      fs.unlink(path.join(__dirname, "..", filePath), (fsErr) => {
-        if (fsErr) {
-          console.error("Error deleting file:", fsErr);
+      const fullPath = path.join(__dirname, "..", filePath);
+      fs.access(fullPath, fs.constants.F_OK, (accessErr) => {
+        if (!accessErr) {
+          fs.unlink(fullPath, (fsErr) => {
+            if (fsErr) {
+              console.error("Error deleting file:", fsErr);
+            }
+          });
+        } else {
+          console.warn("Old file does not exist, skipping deletion:", fullPath);
         }
       });
 
@@ -169,9 +176,19 @@ router.put("/sliders/:id", upload.single("image"), (req, res) => {
       }
 
       if (req.file) {
-        fs.unlink(path.join(__dirname, "..", oldFilePath), (fsErr) => {
-          if (fsErr) {
-            console.error("Error deleting old file:", fsErr);
+        const fullPath = path.join(__dirname, "..", oldFilePath);
+        fs.access(fullPath, fs.constants.F_OK, (accessErr) => {
+          if (!accessErr) {
+            fs.unlink(fullPath, (fsErr) => {
+              if (fsErr) {
+                console.error("Error deleting old file:", fsErr);
+              }
+            });
+          } else {
+            console.warn(
+              "Old file does not exist, skipping deletion:",
+              fullPath
+            );
           }
         });
       }
