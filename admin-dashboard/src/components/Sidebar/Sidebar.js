@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
       )}
 
       {/* Sidebar component */}
-      <div className={`sidebar ${isOpen ? "opened" : ""}`}>
+      <div className={`sidebar  ${isOpen ? "opened" : ""}`}>
         <div className="sidebar-inner">
           <div id="sidebar-menu" className="sidebar-menu">
             <ul>
