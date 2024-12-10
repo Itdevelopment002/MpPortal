@@ -6,10 +6,10 @@ import api from "../../api";
 import { AiOutlineCalendar } from "react-icons/ai";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import HeaderAdmin from '../HeaderAdmin/HeaderAdmin';
-import Sidebar from '../Sidebar/Sidebar';
-import FooterAdmin from '../FooterAdmin/FooterAdmin';
-import Swal from 'sweetalert2'; 
+import HeaderAdmin from "../HeaderAdmin/HeaderAdmin";
+import Sidebar from "../Sidebar/Sidebar";
+import FooterAdmin from "../FooterAdmin/FooterAdmin";
+import Swal from "sweetalert2";
 
 const formatDate = (date) => {
   const d = new Date(date);
@@ -19,8 +19,8 @@ const formatDate = (date) => {
   return `${year}-${month}-${day}`;
 };
 const EditApplication = () => {
-  const { id } = useParams(); // Get the ID from the URL
-  const navigate = useNavigate(); // Hook for navigation after updating
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [grievance, setGrievance] = useState(null);
   const [subjects, setSubjects] = useState([]);
@@ -42,14 +42,13 @@ const EditApplication = () => {
     fetchStatus();
     fetchTalukas();
     fetchGroups();
+    //eslint-disable-next-line
   }, [id]);
-
 
   const fetchGrievance = async () => {
     try {
       const response = await api.get(`/grievances/${id}`);
       const grievanceData = response.data;
-      // Format date before setting state
       grievanceData.date = formatDate(grievanceData.date);
       setGrievance(grievanceData);
     } catch (err) {
@@ -61,8 +60,8 @@ const EditApplication = () => {
 
   const fetchSubjects = async () => {
     try {
-      const response = await api.get("/subjects"); // Update with your API URL
-      setSubjects(response.data); // Store subjects in state
+      const response = await api.get("/subjects");
+      setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
     }
@@ -70,8 +69,8 @@ const EditApplication = () => {
 
   const fetchBooths = async () => {
     try {
-      const response = await api.get("/booths"); // Update with your API URL
-      setBooths(response.data); // Store subjects in state
+      const response = await api.get("/booths");
+      setBooths(response.data);
     } catch (error) {
       console.error("Error fetching booths:", error);
     }
@@ -79,10 +78,8 @@ const EditApplication = () => {
 
   const fetchAssistants = async () => {
     try {
-      const response = await api.get(
-        "/personal_assistants"
-      ); // Update with your API URL
-      setAssistants(response.data); // Store subjects in state
+      const response = await api.get("/personal_assistants");
+      setAssistants(response.data);
     } catch (error) {
       console.error("Error fetching assistants:", error);
     }
@@ -90,10 +87,8 @@ const EditApplication = () => {
 
   const fetchSenders = async () => {
     try {
-      const response = await api.get(
-        "/complaint_senders"
-      );
-      setSenders(response.data); // Store subjects in state
+      const response = await api.get("/complaint_senders");
+      setSenders(response.data);
     } catch (error) {
       console.error("Error fetching senders:", error);
     }
@@ -101,9 +96,7 @@ const EditApplication = () => {
 
   const fetchStatus = async () => {
     try {
-      const response = await api.get(
-        "/application_status"
-      );
+      const response = await api.get("/application_status");
       setStatus(response.data);
     } catch (error) {
       console.error("Error fetching status:", error);
@@ -121,9 +114,7 @@ const EditApplication = () => {
 
   const fetchGroups = async () => {
     try {
-      const response = await api.get(
-        "/whatsapp_groups"
-      );
+      const response = await api.get("/whatsapp_groups");
       setGroups(response.data);
     } catch (error) {
       console.error("Error fetching groups:", error);
@@ -133,14 +124,14 @@ const EditApplication = () => {
   const handleUpdate = async () => {
     try {
       const updatedGrievance = {
-        ...grievance, // Send updated grievance state to backend
+        ...grievance,
         subject: grievance.subject,
         fullName: grievance.fullName,
         mobileNo: grievance.mobileNo,
         boothNo: grievance.boothNo,
         handledBy: grievance.handledBy,
         complaintSentTo: grievance.complaintSentTo,
-     date: formatDate(grievance.date),
+        date: formatDate(grievance.date),
         applicationStatus: grievance.applicationStatus,
         district: grievance.district,
         taluka: grievance.taluka,
@@ -151,19 +142,18 @@ const EditApplication = () => {
         remark: grievance.remark,
       };
 
-      // PUT request to update grievance
       await api.put(`/grievances/${id}`, updatedGrievance);
       Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: 'Grievance updated successfully!',
-        timer: 2000, 
-        timerProgressBar: true, 
-        showConfirmButton: false, 
-    }).then(() => {
-        console.log('Alert closed');
-    });
-      navigate("/all-grievance-list"); // Redirect to grievance list after update
+        icon: "success",
+        title: "Success!",
+        text: "Grievance updated successfully!",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      }).then(() => {
+        console.error("Alert closed");
+      });
+      navigate("/all-grievance-list");
     } catch (err) {
       console.error("Error updating grievance:", err);
       alert("Failed to update grievance");
@@ -178,17 +168,15 @@ const EditApplication = () => {
     return <div>{error}</div>;
   }
 
-  // Check if grievance exists before rendering its properties
   if (!grievance) {
     return <div>No grievance data found</div>;
   }
   return (
     <>
-    <HeaderAdmin/>
-    <Sidebar/>
+      <HeaderAdmin />
+      <Sidebar />
       <div class="main-content app-content">
         <div class="container-fluid">
-          {/* <!-- Page Header --> */}
           <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
             <div>
               <nav>
@@ -221,7 +209,10 @@ const EditApplication = () => {
                         className="form-select"
                         value={grievance.subject}
                         onChange={(e) =>
-                          setGrievance({ ...grievance, subject: e.target.value })
+                          setGrievance({
+                            ...grievance,
+                            subject: e.target.value,
+                          })
                         }
                       >
                         <option>Select PA</option>
@@ -241,7 +232,10 @@ const EditApplication = () => {
                         className="form-control"
                         value={grievance.fullName}
                         onChange={(e) =>
-                          setGrievance({ ...grievance, fullName: e.target.value })
+                          setGrievance({
+                            ...grievance,
+                            fullName: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -254,7 +248,10 @@ const EditApplication = () => {
                         className="form-control"
                         value={grievance.mobileNo}
                         onChange={(e) =>
-                          setGrievance({ ...grievance, mobileNo: e.target.value })
+                          setGrievance({
+                            ...grievance,
+                            mobileNo: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -266,7 +263,10 @@ const EditApplication = () => {
                         className="form-select"
                         value={grievance.boothNo}
                         onChange={(e) =>
-                          setGrievance({ ...grievance, boothNo: e.target.value })
+                          setGrievance({
+                            ...grievance,
+                            boothNo: e.target.value,
+                          })
                         }
                       >
                         <option>Select Booth No.</option>
@@ -285,7 +285,10 @@ const EditApplication = () => {
                         className="form-select"
                         value={grievance.handledBy}
                         onChange={(e) =>
-                          setGrievance({ ...grievance, handledBy: e.target.value })
+                          setGrievance({
+                            ...grievance,
+                            handledBy: e.target.value,
+                          })
                         }
                       >
                         <option>Select PA</option>
@@ -318,27 +321,28 @@ const EditApplication = () => {
                         ))}
                       </select>
                     </div>
-                  <div className="col-xl-3 col-md-6">
-  <div className="form-group">
-    <label className="form-label">
-      Entry Date <span className="text-danger">*</span>
-    </label>
-    <div className="input-group">
-      <div className="input-group-text text-muted">
-        <AiOutlineCalendar size={15} />
-      </div>
-      <ReactDatePicker
-        selected={grievance.date ? new Date(grievance.date) : null} 
-        dateFormat="dd-MM-yyyy"
-        onChange={(date) =>
-          setGrievance({ ...grievance, date: date })
-        }
-        
-        className="form-control"
-      />
-    </div>
-  </div>
-</div>
+                    <div className="col-xl-3 col-md-6">
+                      <div className="form-group">
+                        <label className="form-label">
+                          Entry Date <span className="text-danger">*</span>
+                        </label>
+                        <div className="input-group">
+                          <div className="input-group-text text-muted">
+                            <AiOutlineCalendar size={15} />
+                          </div>
+                          <ReactDatePicker
+                            selected={
+                              grievance.date ? new Date(grievance.date) : null
+                            }
+                            dateFormat="dd-MM-yyyy"
+                            onChange={(date) =>
+                              setGrievance({ ...grievance, date: date })
+                            }
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+                    </div>
 
                     <div class="col-xl-3 col-md-6">
                       <label for="input-rounded" class="form-label">
@@ -371,7 +375,10 @@ const EditApplication = () => {
                         className="form-control"
                         value={grievance.district}
                         onChange={(e) =>
-                          setGrievance({ ...grievance, district: e.target.value })
+                          setGrievance({
+                            ...grievance,
+                            district: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -403,7 +410,10 @@ const EditApplication = () => {
                         className="form-control"
                         value={grievance.village}
                         onChange={(e) =>
-                          setGrievance({ ...grievance, village: e.target.value })
+                          setGrievance({
+                            ...grievance,
+                            village: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -429,7 +439,10 @@ const EditApplication = () => {
                         className="form-control"
                         value={grievance.pincode}
                         onChange={(e) =>
-                          setGrievance({ ...grievance, pincode: e.target.value })
+                          setGrievance({
+                            ...grievance,
+                            pincode: e.target.value,
+                          })
                         }
                       />
                     </div>
@@ -472,26 +485,26 @@ const EditApplication = () => {
                     </div>
                   </div>
                   <div className="mt-3">
-                      <button
-                        onClick={handleUpdate}
-                        className="btn btn-purple-gradient btn-wave waves-effect waves-light"
-                      >
-                        Update
-                      </button>
-                      <Link
-                        to="/all-grievance-list"
-                        className="btn btn-danger-gradient btn-wave waves-effect waves-light mx-1"
-                      >
-                        Cancel
-                      </Link>
-                    </div>
+                    <button
+                      onClick={handleUpdate}
+                      className="btn btn-purple-gradient btn-wave waves-effect waves-light"
+                    >
+                      Update
+                    </button>
+                    <Link
+                      to="/all-grievance-list"
+                      className="btn btn-danger-gradient btn-wave waves-effect waves-light mx-1"
+                    >
+                      Cancel
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <FooterAdmin/>
+      <FooterAdmin />
     </>
   );
 };

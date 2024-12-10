@@ -9,35 +9,27 @@ const AddSubject = () => {
   const [formData, setFormData] = useState({ id: null, subject_name: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false); // To control the edit modal
+  const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [Error,setError]=useState({subject_name:""});
+  const [Error, setError] = useState({ subject_name: "" });
 
+  const validateForm = () => {
+    const newError = { subject_name: "" };
+    let isValid = true;
 
+    if (!formData.subject_name.trim()) {
+      newError.subject_name = "*subject Name is required.";
+      isValid = false;
+    }
 
+    setError(newError);
+    return isValid;
+  };
 
+  const handleFocus = (field) => {
+    setError((prevError) => ({ ...prevError, [field]: "" }));
+  };
 
-  //validations
-
-const validateForm = () => {
-  const newError = { subject_name:""};
-  let isValid = true;
-
-  if (!formData.subject_name.trim()) {
-    newError.subject_name = "*subject Name is required.";
-    isValid = false;
-  }
-  
-  setError(newError);
-  return isValid;
-};
-
-//handle focus
-const handleFocus = (field) => {
-  setError((prevError) => ({ ...prevError, [field]: "" }));
-};
-
-  // Fetch Personal Assistants
   const fetchSubjects = async () => {
     try {
       const response = await api.get("/subjects");
@@ -47,13 +39,10 @@ const handleFocus = (field) => {
     }
   };
 
-  console.log(subjects);
-
   useEffect(() => {
     fetchSubjects();
   }, []);
 
-  // Handle form input change
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "subject_name") {
@@ -63,48 +52,41 @@ const handleFocus = (field) => {
     }
   };
 
-  // Handle form submission for adding or updating
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validateForm()){
+    if (!validateForm()) {
       return;
     }
     try {
       if (isEditing) {
-        await api.put(
-          `/subjects/${formData.id}`,
-          formData
-        );
+        await api.put(`/subjects/${formData.id}`, formData);
       } else {
         await api.post("/subjects", formData);
       }
       resetForm();
       fetchSubjects();
-      setShowEditModal(false); // Close modal after saving
+      setShowEditModal(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
-  // Handle edit action and show modal
   const handleEdit = (subject) => {
-    setFormData(subject); // Set form data with selected subject
+    setFormData(subject);
     setIsEditing(true);
-    setShowEditModal(true); // Show the modal
+    setShowEditModal(true);
   };
 
-  // Handle delete confirmation
   const handleDelete = async () => {
     try {
       await api.delete(`/subjects/${deleteId}`);
       fetchSubjects();
-      setShowDeleteModal(false); // Close the delete modal after successful deletion
+      setShowDeleteModal(false);
     } catch (error) {
       console.error("Error deleting subject:", error);
     }
   };
 
-  // Reset form and states
   const resetForm = () => {
     setFormData({ id: null, subject_name: "" });
     setIsEditing(false);
@@ -114,7 +96,6 @@ const handleFocus = (field) => {
     <>
       <div className="main-content app-content">
         <div className="container-fluid">
-          {/* Page Header */}
           <div className="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
             <div>
               <nav>
@@ -131,7 +112,6 @@ const handleFocus = (field) => {
             </div>
           </div>
 
-          {/* Form and Table */}
           <div className="row">
             <div className="col-xl-12">
               <div className="card custom-card">
@@ -148,10 +128,13 @@ const handleFocus = (field) => {
                           value={formData.subject_name}
                           onChange={handleChange}
                           placeholder="Enter Subject"
-                          onFocus={() => handleFocus('subject_name')}
+                          onFocus={() => handleFocus("subject_name")}
                         />
-                        {Error.subject_name && <p style={{ color: "red", fontSize: "11px" }}>{Error.subject_name}</p>}
-
+                        {Error.subject_name && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.subject_name}
+                          </p>
+                        )}
                       </div>
                       <div className="mt-5 col-xl-4">
                         <button className="btn btn-purple-gradient">
@@ -169,7 +152,6 @@ const handleFocus = (field) => {
                   </form>
                 </div>
 
-                {/* Subjects List Table */}
                 <div className="card-body">
                   <div className="table-responsive">
                     <table className="table text-nowrap table-bordered border-primary">
@@ -224,12 +206,10 @@ const handleFocus = (field) => {
         </div>
       </div>
 
-      {/* Backdrop when Modals are shown */}
       {(showEditModal || showDeleteModal) && (
         <div className="modal-backdrop fade show"></div>
       )}
 
-      {/* Edit Modal */}
       {showEditModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">
@@ -283,7 +263,6 @@ const handleFocus = (field) => {
           </div>
         </div>
       )}
-      {/* Delete Modal */}
       {showDeleteModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">

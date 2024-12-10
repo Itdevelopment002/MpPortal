@@ -87,9 +87,7 @@ const Footer = () => {
                         {footerData.length > 0 ? (
                           footerData.map((footer, index) => (
                             <tr key={footer.id}>
-                              <td>
-                                {index + 1}
-                              </td>
+                              <td>{index + 1}</td>
                               <td>{footer.websitename}</td>
                               <td>{footer.developedby}</td>
                               <td>
@@ -149,7 +147,7 @@ const Footer = () => {
                         <textarea
                           className="form-control form-control-md"
                           name="developedby"
-                          value={selectedFooter?.developedby|| ""}
+                          value={selectedFooter?.developedby || ""}
                           onChange={handleEditChange}
                         ></textarea>
                       </div>
@@ -175,7 +173,6 @@ const Footer = () => {
               </div>
             </div>
           )}
-
         </div>
       </div>
       <ToastContainer />

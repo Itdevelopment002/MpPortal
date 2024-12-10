@@ -4,44 +4,44 @@ import { Link } from "react-router-dom";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import api from "../../api";
-import HeaderAdmin from '../HeaderAdmin/HeaderAdmin';
-import Sidebar from '../Sidebar/Sidebar';
+import HeaderAdmin from "../HeaderAdmin/HeaderAdmin";
+import Sidebar from "../Sidebar/Sidebar";
 
-import FooterAdmin from '../FooterAdmin/FooterAdmin';
+import FooterAdmin from "../FooterAdmin/FooterAdmin";
 
 const ViewApplication = () => {
-        const { id } = useParams(); // Get the ID from the URL
-        const [grievance, setGrievance] = useState(null);
-        const [loading, setLoading] = useState(true);
-        const [error, setError] = useState(null);
-      
-        const fetchGrievance = async () => {
-          try {
-            const response = await api.get(`/grievances/${id}`);
-            setGrievance(response.data);
-          } catch (err) {
-            setError("Failed to fetch grievance data");
-          } finally {
-            setLoading(false);
-          }
-        };
-      
-        useEffect(() => {
-          fetchGrievance();
-        }, [id]);
-      
-        if (loading) {
-          return <div>Loading...</div>;
-        }
-      
-        if (error) {
-          return <div>{error}</div>;
-        }
-      
-        // Check if grievance exists before rendering its properties
-        if (!grievance) {
-          return <div>No grievance data found</div>;
-        }
+  const { id } = useParams();
+  const [grievance, setGrievance] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchGrievance = async () => {
+    try {
+      const response = await api.get(`/grievances/${id}`);
+      setGrievance(response.data);
+    } catch (err) {
+      setError("Failed to fetch grievance data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchGrievance();
+    //eslint-disable-next-line
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!grievance) {
+    return <div>No grievance data found</div>;
+  }
 
   const handlePrint = () => {
     window.print();
@@ -49,12 +49,10 @@ const ViewApplication = () => {
 
   return (
     <>
-    <HeaderAdmin/>
-    <Sidebar/>
-      {/* // <!-- Start::app-content --> */}
+      <HeaderAdmin />
+      <Sidebar />
       <div class="main-content app-content">
         <div class="container-fluid">
-          {/* <!-- Start::page-header --> */}
           <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
             <div>
               <nav>
@@ -74,9 +72,6 @@ const ViewApplication = () => {
               </nav>
             </div>
           </div>
-          {/* <!-- End::page-header -->
-    
-                    <!-- Start::row-1 --> */}
           <div class="row">
             <div class="col-xl-12">
               <div class="card custom-card">
@@ -97,7 +92,6 @@ const ViewApplication = () => {
                       Print
                       <i className="ri-printer-line ms-1 align-middle d-inline-block"></i>
                     </button>{" "}
-                    {/* <!-- <button class="btn btn-sm btn-primary">Save As PDF<i class="ri-file-pdf-line ms-1 align-middle d-inline-block"></i></button> --> */}
                   </div>
                 </div>
                 <div class="card-body">
@@ -148,7 +142,9 @@ const ViewApplication = () => {
                               <th>
                                 <b>Issued Date :</b>
                               </th>
-                              <td>{new Date(grievance.date).toLocaleDateString()}</td>
+                              <td>
+                                {new Date(grievance.date).toLocaleDateString()}
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -234,8 +230,7 @@ const ViewApplication = () => {
           </div>
         </div>
       </div>
-    <FooterAdmin/>
-
+      <FooterAdmin />
     </>
   );
 };

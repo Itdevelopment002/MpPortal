@@ -5,8 +5,7 @@ const db = require("../config/db.js");
 router.post("/dashboard-user", (req, res) => {
   const { username, password } = req.body;
 
-  const query =
-    "INSERT INTO dashboarduser (username, password) VALUES (?, ?)";
+  const query = "INSERT INTO dashboarduser (username, password) VALUES (?, ?)";
   db.query(query, [username, password], (err, results) => {
     if (err) {
       console.error("Error adding user:", err);

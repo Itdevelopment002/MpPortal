@@ -1,4 +1,3 @@
-/* Full Page Setup */
 .login-page {
   height: 100vh;
   background-image: url("../../assets/img/bg2.jpg");
@@ -8,24 +7,21 @@
   display: flex; 
 }
 
-/* Row setup for layout */
 .row1 {
   margin: 0;
   height: 100%;
   width: 100%;
 }
 
-/* Left Side */
 .left-side {
-  width: 50%; /* Half the screen width */
+  width: 50%; 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Right Side */
 .right-side {
-  width: 50%; /* Half the screen width */
+  width: 50%; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +33,6 @@
   font-weight: normal;
 }
 
-/* Form Container */
 .form-container1 {
   max-width: 400px;
   width: 100%;
@@ -84,7 +79,6 @@
   text-transform: uppercase;
 }
 
-
 .a1 {
   color: #333;
   font-size: 14px;
@@ -99,31 +93,32 @@
 @media (max-width: 768px) {
   .login-page {
     flex-direction: column; 
-    background-position: right; /* Show the right side of the background image */
+    background-position: right; 
   }
 
   .left-side {
-    display: none; /* Hide left side on smaller screens */
+    display: none; 
   }
 
   .right-side {
-    width: 100%; /* Make the right side take full width */
+    width: 100%; 
   }
 
   .form-container {
-    padding: 20px; /* Reduce padding for smaller screens */
+    padding: 20px; 
   }
 }
+
 @media (max-width: 768px) {
   .login-page {
-    background-size: cover; /* Adjusts the size to ensure visibility on smaller devices */
-    background-position: left; /* Focus on the right part of the image */
+    background-size: cover;
+    background-position: left; 
   }
 }
 
 @media (max-width: 480px) {
   .login-page {
-    background-size: cover; /* Ensure the image doesn't crop on very small devices */
-    background-position: left; /* Re-center the image */
+    background-size: cover; 
+    background-position: left; 
   }
 }

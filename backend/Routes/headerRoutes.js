@@ -114,7 +114,6 @@ router.put("/header/:id", upload.single("websitelogo"), (req, res) => {
   let updateSql = "UPDATE header SET";
   const updateParams = [];
 
-  // Building query conditions
   if (websitename) {
     updateSql += " websitename = ?";
     updateParams.push(websitename);
@@ -128,7 +127,8 @@ router.put("/header/:id", upload.single("websitelogo"), (req, res) => {
   let newFilePath = null;
   if (req.file) {
     newFilePath = `/uploads/${req.file.filename}`;
-    updateSql += updateParams.length > 0 ? ", websitelogo = ?" : " websitelogo = ?";
+    updateSql +=
+      updateParams.length > 0 ? ", websitelogo = ?" : " websitelogo = ?";
     updateParams.push(newFilePath);
   }
 
@@ -152,11 +152,9 @@ router.put("/header/:id", upload.single("websitelogo"), (req, res) => {
         return res.status(500).json({ message: "Database error", error: err });
       }
 
-      // Delete the old file if a new file was uploaded
       if (newFilePath) {
         const fullPath = path.resolve(__dirname, "..", oldFilePath);
 
-        // Check if the file exists before attempting to delete
         fs.access(fullPath, fs.constants.F_OK, (accessErr) => {
           if (!accessErr) {
             fs.unlink(fullPath, (unlinkErr) => {
@@ -165,7 +163,10 @@ router.put("/header/:id", upload.single("websitelogo"), (req, res) => {
               }
             });
           } else {
-            console.warn("Old file does not exist, skipping deletion:", fullPath);
+            console.warn(
+              "Old file does not exist, skipping deletion:",
+              fullPath
+            );
           }
         });
       }
@@ -174,7 +175,5 @@ router.put("/header/:id", upload.single("websitelogo"), (req, res) => {
     });
   });
 });
-
-
 
 module.exports = router;

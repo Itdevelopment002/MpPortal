@@ -17,7 +17,7 @@ const AddUser = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false); // To control the edit modal
+  const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [Error, setError] = useState({
     name: "",
@@ -29,7 +29,14 @@ const AddUser = () => {
   });
 
   const validateForm = () => {
-    const newError = { name: "", mobile: "", user_permission: "", username: "", password: "", confirmPassword: "" };
+    const newError = {
+      name: "",
+      mobile: "",
+      user_permission: "",
+      username: "",
+      password: "",
+      confirmPassword: "",
+    };
     let isValid = true;
 
     if (!formData.name) {
@@ -48,7 +55,7 @@ const AddUser = () => {
     if (!formData.mobile) {
       newError.mobile = "*Mobile number is required";
       isValid = false;
-    } else if (!/^\d{10}$/.test(formData.mobile)) { // Checks if the mobile number is exactly 10 digits
+    } else if (!/^\d{10}$/.test(formData.mobile)) {
       newError.mobile = "*Mobile number must be 10 digits";
       isValid = false;
     }
@@ -56,17 +63,17 @@ const AddUser = () => {
     if (!formData.password) {
       newError.password = "*Password is required";
       isValid = false;
-
-    } else if (!/[A-Za-z]/.test(formData.password) || !/\d/.test(formData.password)) {
+    } else if (
+      !/[A-Za-z]/.test(formData.password) ||
+      !/\d/.test(formData.password)
+    ) {
       newError.password = "*Password must contain both letters and numbers";
       isValid = false;
-
     } else if (formData.password.length < 8 || formData.password.length > 15) {
       newError.password = "*Password must be between 8 and 15 characters long";
       isValid = false;
-
     } else {
-      newError.password = "";  // Clear the error if the password is valid
+      newError.password = "";
     }
 
     if (!formData.confirmPassword) {
@@ -74,15 +81,13 @@ const AddUser = () => {
       isValid = false;
     }
 
-
-
     setError(newError);
     return isValid;
-  }
+  };
 
   const handleFocus = (field) => {
     setError((prevError) => ({ ...prevError, [field]: "" }));
-  }
+  };
 
   const fetchUsers = async () => {
     try {
@@ -101,48 +106,51 @@ const AddUser = () => {
     const { name, value } = e.target;
     let newError = {};
 
-    if (name === "name" || name === "subject" || name === "user_permission" || name === "username") {
+    if (
+      name === "name" ||
+      name === "subject" ||
+      name === "user_permission" ||
+      name === "username"
+    ) {
       if (/^[A-Za-z\s]*$/.test(value) || value === "") {
         setFormData({ ...formData, [name]: value });
       }
-    }
-
-
-    else if (name === "mobile") {
+    } else if (name === "mobile") {
       if (/^[0-9]*$/.test(value) || value === "") {
         setFormData({ ...formData, [name]: value });
-      }
-      else {
+      } else {
         newError[name] = `*Only numbers are allowed for ${name}`;
       }
     }
 
     if (name === "password") {
-      // Set the form data with the entered password
       setFormData({ ...formData, [name]: value });
 
-      if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/.test(value)) {
-
+      if (
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/.test(
+          value
+        )
+      ) {
         newError[name] = "";
       } else {
-
-        newError[name] = "*Password must be 8-15 characters long, and contain both letters and numbers";
+        newError[name] =
+          "*Password must be 8-15 characters long, and contain both letters and numbers";
       }
     }
 
     if (name === "confirmPassword") {
-
       setFormData({ ...formData, [name]: value });
 
-
-      if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/.test(value)) {
-
+      if (
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,15}$/.test(
+          value
+        )
+      ) {
         newError[name] = "";
       } else {
-
-        newError[name] = "*Password must be 8-15 characters long, and contain both letters and numbers";
+        newError[name] =
+          "*Password must be 8-15 characters long, and contain both letters and numbers";
       }
-
 
       if (formData.password && value !== formData.password) {
         newError["confirmPassword"] = "*Passwords do not match";
@@ -153,52 +161,45 @@ const AddUser = () => {
     setError((prevError) => ({ ...prevError, ...newError }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
       return;
     }
 
-    // Password matching check
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    // Exclude confirmPassword before sending data
     const { confirmPassword, ...dataToPost } = formData;
 
     try {
       if (isEditing) {
-        await api.put(
-          `/add-user/${formData.id}`,
-          dataToPost // Use dataToPost instead of formData
-        );
+        await api.put(`/add-user/${formData.id}`, dataToPost);
       } else {
-        await api.post("/add-user", dataToPost); // Use dataToPost instead of formData
+        await api.post("/add-user", dataToPost);
       }
 
-      // Reset form and fetch subjects after successful submission
       resetForm();
       fetchUsers();
-      setShowEditModal(false); // Close modal after saving
+      setShowEditModal(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
   const handleEdit = (user) => {
-    setFormData(user); // Set form data with selected subject
+    setFormData(user);
     setIsEditing(true);
-    setShowEditModal(true); // Show the modal
+    setShowEditModal(true);
   };
 
   const handleDelete = async () => {
     try {
       await api.delete(`/add-user/${deleteId}`);
       fetchUsers();
-      setShowDeleteModal(false); // Close the delete modal after successful deletion
+      setShowDeleteModal(false);
     } catch (error) {
       console.error("Error deleting subject:", error);
     }
@@ -221,7 +222,6 @@ const AddUser = () => {
     <>
       <div class="main-content app-content">
         <div class="container-fluid">
-          {/* <!-- Page Header --> */}
           <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
             <div>
               <nav>
@@ -235,12 +235,8 @@ const AddUser = () => {
                   </li>
                 </ol>
               </nav>
-              {/* <!-- <h1 class="page-title fw-medium fs-18 mb-0">Add New Entry</h1> --> */}
             </div>
           </div>
-          {/* <!-- Page Header Close -->
-
-        <!-- Start::row-1 --> */}
           <div class="row">
             <div class="col-xl-12">
               <div class="card custom-card">
@@ -259,10 +255,13 @@ const AddUser = () => {
                           value={formData.name}
                           onChange={handleChange}
                           placeholder="Enter User Full Name"
-                          onFocus={() => handleFocus('name')}
+                          onFocus={() => handleFocus("name")}
                         />
-                        {Error.name && <p style={{ color: "red", fontSize: "11px" }}>{Error.name}</p>}
-
+                        {Error.name && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.name}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-4 col-md-4">
                         <label for="input-rounded" class="form-label">
@@ -277,10 +276,13 @@ const AddUser = () => {
                           value={formData.mobile}
                           onChange={handleChange}
                           placeholder="Enter Mobile No."
-                          onFocus={() => handleFocus('mobile')}
+                          onFocus={() => handleFocus("mobile")}
                         />
-                        {Error.mobile && <p style={{ color: "red", fontSize: "11px" }}>{Error.mobile}</p>}
-
+                        {Error.mobile && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.mobile}
+                          </p>
+                        )}
                       </div>
                       <div className="col-xl-4 col-md-4">
                         <label htmlFor="user-select" className="form-label">
@@ -292,14 +294,17 @@ const AddUser = () => {
                           name="user_permission"
                           value={formData.user_permission}
                           onChange={handleChange}
-                          onFocus={() => handleFocus('user_permission')}
+                          onFocus={() => handleFocus("user_permission")}
                         >
                           <option value="">Select user permission</option>
                           <option value="User">User</option>
                           <option value="Admin">Admin</option>
                         </select>
-                        {Error.user_permission && <p style={{ color: "red", fontSize: "11px" }}>{Error.user_permission}</p>}
-
+                        {Error.user_permission && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.user_permission}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-4 color-selection">
                         <label for="product-color-add" class="form-label">
@@ -313,10 +318,13 @@ const AddUser = () => {
                           value={formData.username}
                           onChange={handleChange}
                           placeholder="Enter User Name"
-                          onFocus={() => handleFocus('username')}
+                          onFocus={() => handleFocus("username")}
                         />
-                        {Error.username && <p style={{ color: "red", fontSize: "11px" }}>{Error.username}</p>}
-
+                        {Error.username && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.username}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-4 color-selection">
                         <label for="product-color-add" class="form-label">
@@ -330,10 +338,13 @@ const AddUser = () => {
                           value={formData.password}
                           onChange={handleChange}
                           placeholder="Enter User Password"
-                          onFocus={() => handleFocus('password')}
+                          onFocus={() => handleFocus("password")}
                         />
-                        {Error.password && <p style={{ color: "red", fontSize: "11px" }}>{Error.password}</p>}
-
+                        {Error.password && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.password}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-4 color-selection">
                         <label for="product-color-add" class="form-label">
@@ -347,10 +358,13 @@ const AddUser = () => {
                           value={formData.confirmPassword}
                           onChange={handleChange}
                           placeholder="Enter Confirm Password"
-                          onFocus={() => handleFocus('confirmPassword')}
+                          onFocus={() => handleFocus("confirmPassword")}
                         />
-                        {Error.confirmPassword && <p style={{ color: "red", fontSize: "11px" }}>{Error.confirmPassword}</p>}
-
+                        {Error.confirmPassword && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.confirmPassword}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="mt-5 col-xl-4">
@@ -429,20 +443,16 @@ const AddUser = () => {
         </div>
       </div>
 
-      {/* Backdrop when Modals are shown */}
       {(showEditModal || showDeleteModal) && (
         <div className="modal-backdrop fade show"></div>
       )}
 
-      {/* Edit Modal */}
       {showEditModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h6 className="modal-title">
-                  Edit User
-                </h6>
+                <h6 className="modal-title">Edit User</h6>
                 <button
                   type="button"
                   className="btn-close"
@@ -455,9 +465,7 @@ const AddUser = () => {
               <div class="modal-body">
                 <div class="row gy-3">
                   <div class="col-xl-12 col-md-12">
-                    <label className="form-label">
-                      User Full Name
-                    </label>
+                    <label className="form-label">User Full Name</label>
                     <input
                       type="text"
                       class="form-control"
@@ -524,10 +532,13 @@ const AddUser = () => {
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       placeholder="Enter Confirm Password"
-                      onFocus={() => handleFocus('confirmPassword')}
+                      onFocus={() => handleFocus("confirmPassword")}
                     />
-                    {Error.confirmPassword && <p style={{ color: "red", fontSize: "11px" }}>{Error.confirmPassword}</p>}
-
+                    {Error.confirmPassword && (
+                      <p style={{ color: "red", fontSize: "11px" }}>
+                        {Error.confirmPassword}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -555,7 +566,6 @@ const AddUser = () => {
         </div>
       )}
 
-      {/* Delete Modal */}
       {showDeleteModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">

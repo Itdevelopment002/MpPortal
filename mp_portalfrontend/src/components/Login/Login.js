@@ -1,5 +1,3 @@
-// / eslint-disable jsx-a11y/anchor-is-valid /
-
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import api, { baseURLImage } from "../../api";
@@ -89,7 +87,6 @@ const Login = () => {
     }
     try {
       await api.post("/login", userData);
-      // Store the login state in localStorage
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem(
         "user",
@@ -114,7 +111,7 @@ const Login = () => {
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
-      setUser(storedUser); // Update the state with the logged-in user data
+      setUser(storedUser);
     }
   }, []);
 
@@ -186,6 +183,7 @@ const Login = () => {
                           />
                           <a
                             className="show-password-button text-muted"
+                            href="#."
                             onClick={togglePasswordVisibility}
                           >
                             {showPassword ? (

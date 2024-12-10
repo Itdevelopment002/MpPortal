@@ -8,7 +8,6 @@ const Carousel = () => {
   const fetchSlider = async () => {
     try {
       const response = await api.get("/sliders");
-      console.log(response.data);
       setSlider(response.data);
     } catch (error) {
       console.error("Error fetching slider data", error);

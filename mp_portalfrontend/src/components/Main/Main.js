@@ -10,7 +10,6 @@ const Main = () => {
   const fetchProfile = async () => {
     try {
       const response = await api.get("/mp-profile");
-      console.log(response.data);
       setProfile(response.data);
     } catch (error) {
       console.error("Error fetching profile data", error);
@@ -20,7 +19,6 @@ const Main = () => {
   const fetchProfileDesc = async () => {
     try {
       const response = await api.get("/mp-profile-desc");
-      console.log(response.data);
       setProfileDesc(response.data);
     } catch (error) {
       console.error("Error fetching profile description data", error);
@@ -60,8 +58,7 @@ const Main = () => {
                 <div className="heading-description fs-14">
                   {profileDesc.map((desc, index) => (
                     <p key={index}>
-                      <b>{profile[0]?.name}</b>{" "}
-                      {desc.description}
+                      <b>{profile[0]?.name}</b> {desc.description}
                     </p>
                   ))}
                 </div>
