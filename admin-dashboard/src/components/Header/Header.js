@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import "./Header.css";
 
-const Header = ({ onLogout, userDepartment }) => {
+const Header = ({ onLogout, userDepartment, username }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   // eslint-disable-next-line
   const [isScreenLarge, setIsScreenLarge] = useState(window.innerWidth > 990);
@@ -106,8 +106,7 @@ const Header = ({ onLogout, userDepartment }) => {
                   <span className="status online"></span>{" "}
                   {/* Online status dot */}
                 </span>
-                <span className="mx-1">Admin</span>{" "}
-                <i className="fa fa-angle-down ml-1"></i>
+                <span className="mx-1">{username || "Admin"}</span>{" "}                <i className="fa fa-angle-down ml-1"></i>
               </Link>
               {isUserDropdownOpen && (
                 <div className="dropdown-menu show dropdown-keep-visible">
