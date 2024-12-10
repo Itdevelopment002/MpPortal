@@ -40,7 +40,7 @@ function App() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      setUsername(localStorage.getItem("username") || ""); // Retrieve username after login
+      setUsername(localStorage.getItem("username") || "");
     } else {
       setUsername("");
     }

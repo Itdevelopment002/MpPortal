@@ -41,8 +41,6 @@ const Login = ({ onLogin }) => {
       const endpoint = "/";
       const response = await api.post(endpoint, userData);
       const { uniqueId, username } = response.data;
-
-      // Save username and token to localStorage
       localStorage.setItem("authToken", uniqueId);
       localStorage.setItem("username", username);
       onLogin();

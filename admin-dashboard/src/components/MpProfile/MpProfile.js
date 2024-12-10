@@ -57,6 +57,7 @@ const MpProfile = () => {
     setImagePreview(type === "mp" ? `${baseURLImage}${item.image_path}` : "");
     setModalType(type);
     setShowEditModal(true);
+    document.body.classList.add("modal-open");
   };
 
   const closeModal = () => {
