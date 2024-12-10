@@ -5,6 +5,7 @@ import api, { baseURLImage } from "../../api";
 
 const Main = () => {
   const [profile, setProfile] = useState([]);
+  const [profileDesc, setProfileDesc] = useState([]);
 
   const fetchProfile = async () => {
     try {
@@ -16,8 +17,19 @@ const Main = () => {
     }
   };
 
+  const fetchProfileDesc = async () => {
+    try {
+      const response = await api.get("/mp-profile-desc");
+      console.log(response.data);
+      setProfileDesc(response.data);
+    } catch (error) {
+      console.error("Error fetching profile description data", error);
+    }
+  };
+
   useEffect(() => {
     fetchProfile();
+    fetchProfileDesc();
   }, []);
 
   return (
@@ -46,11 +58,12 @@ const Main = () => {
                 <h4 className="mt-3 fw-semibold mb-2">{profile[0]?.name}</h4>
                 <h6 className="mb-4 fw-bold">{profile[0]?.designation}</h6>
                 <div className="heading-description fs-14">
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: profile[0]?.info,
-                    }}
-                  />
+                  {profileDesc.map((desc, index) => (
+                    <p key={index}>
+                      <b>{profile[0]?.name}</b>{" "}
+                      {desc.description}
+                    </p>
+                  ))}
                 </div>
               </div>
             </div>

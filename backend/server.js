@@ -23,6 +23,7 @@ const dashboardLoginRoutes = require('./Routes/dashboardLoginRoutes');
 const headerRoutes = require('./Routes/headerRoutes');
 const footerRoutes = require('./Routes/footerRoutes');
 const mpProfileRoutes = require('./Routes/mpProfileRoutes');
+const mpProfileDescRoutes = require('./Routes/mpProfileDescRoutes');
 const loginFormRoutes = require('./Routes/loginFormRoutes');
 const loginProfileRoutes = require('./Routes/loginProfileRoutes');
 
@@ -41,6 +42,7 @@ app.use('/api', dashboardLoginRoutes);
 app.use('/api', headerRoutes);
 app.use('/api', footerRoutes);
 app.use('/api', mpProfileRoutes);
+app.use('/api', mpProfileDescRoutes);
 app.use('/api', loginFormRoutes);
 app.use('/api', loginProfileRoutes);
 

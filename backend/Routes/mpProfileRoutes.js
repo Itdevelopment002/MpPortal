@@ -14,22 +14,25 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 router.post("/mp-profile", upload.single("image"), (req, res) => {
-  const { name, designation, info } = req.body;
+  const { name, designation } = req.body;
 
-  if (!name || !designation || !info) {
+  if (!name || !designation) {
     return res
       .status(400)
-      .json({ message: "Name, designation, and info are required" });
+      .json({ message: "Name and designation are required" });
   }
 
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
   const sql =
-    "INSERT INTO mp_profile (name, designation, info, image_path) VALUES (?, ?, ?, ?)";
-  db.query(sql, [name, designation, info, imagePath], (err, result) => {
+    "INSERT INTO mp_profile (name, designation, image_path) VALUES (?, ?, ?)";
+  db.query(sql, [name, designation, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -66,7 +69,7 @@ router.get("/mp-profile/:id", (req, res) => {
 
 router.put("/mp-profile/:id", upload.single("image"), (req, res) => {
   const { id } = req.params;
-  const { name, designation, info } = req.body;
+  const { name, designation } = req.body;
 
   let updateSql = "UPDATE mp_profile SET";
   const updateParams = [];
@@ -78,10 +81,6 @@ router.put("/mp-profile/:id", upload.single("image"), (req, res) => {
   if (designation) {
     updateSql += updateParams.length > 0 ? ", designation = ?" : " designation = ?";
     updateParams.push(designation);
-  }
-  if (info) {
-    updateSql += updateParams.length > 0 ? ", info = ?" : " info = ?";
-    updateParams.push(info);
   }
 
   let imagePath;

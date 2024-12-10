@@ -40,9 +40,10 @@ const Login = ({ onLogin }) => {
     try {
       const endpoint = "/";
       const response = await api.post(endpoint, userData);
-      localStorage.setItem("authToken", response.data.uniqueId);
-      localStorage.setItem("username", userData.username); // Save the username
-      onLogin(userData.username);
+      const { uniqueId, username } = response.data;
+      localStorage.setItem("authToken", uniqueId);
+      localStorage.setItem("username", username);
+      onLogin();
     } catch (err) {
       Swal.fire({
         icon: "error",

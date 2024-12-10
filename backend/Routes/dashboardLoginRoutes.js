@@ -24,6 +24,7 @@ router.post("/", generateUniqueId, (req, res) => {
       res.json({
         message: "Login successful",
         uniqueId: req.uniqueId,
+        username: username,
       });
     } else {
       res.status(401).json({ message: "Invalid credentials" });
