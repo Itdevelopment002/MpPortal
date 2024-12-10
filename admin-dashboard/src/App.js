@@ -35,10 +35,12 @@ function App() {
     !!localStorage.getItem("authToken")
   );
   const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState(localStorage.getItem("username"));
 
-  const handleLogin = () => {
+  const handleLogin = (loggedInUsername) => {
     setLoading(true);
     setIsAuthenticated(true);
+    setUsername(loggedInUsername);
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -46,7 +48,9 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem("username");
     setIsAuthenticated(false);
+    setUsername(null);
   };
 
   return (
@@ -62,7 +66,7 @@ function App() {
             <Spinner />
           ) : (
             <>
-              <Header onLogout={handleLogout} />
+              <Header onLogout={handleLogout} username={username} />
               <div>
                 <Sidebar />
                 <div>

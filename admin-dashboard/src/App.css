@@ -2288,3 +2288,7 @@ a {
 .table .mpprofile-items{
     text-align: left !important;
 }
+  
+body.modal-open {
+	overflow: auto !important; /* Enable scrolling for the body */
+  }

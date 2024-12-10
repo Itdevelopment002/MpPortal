@@ -42,6 +42,7 @@ const MpProfile = () => {
     setEditData(mpprofile);
     setImagePreview(`${baseURLImage}${mpprofile.image_path}`);
     setShowEditModal(true);
+    document.body.classList.add("modal-open");
   };
 
   const handleEditSubmit = async () => {
@@ -217,7 +218,7 @@ const MpProfile = () => {
                             src={imagePreview}
                             alt="preview"
                             width="100"
-                            className="mt-2"
+                            className="mt-1"
                           />
                         )}
                       </div>
