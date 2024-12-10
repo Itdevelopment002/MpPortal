@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -34,11 +34,22 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("authToken")
   );
-  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState(localStorage.getItem("username") || "");
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setUsername(localStorage.getItem("username") || ""); // Retrieve username after login
+    } else {
+      setUsername("");
+    }
+  }, [isAuthenticated]);
+
+  const handleLogin = (loggedInUsername) => {
     setLoading(true);
     setIsAuthenticated(true);
+    setUsername(loggedInUsername);
     setTimeout(() => {
       setLoading(false);
     }, 1000);
@@ -46,7 +57,9 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
+    localStorage.removeItem("username");
     setIsAuthenticated(false);
+    setUsername("");
   };
 
   return (
@@ -62,7 +75,7 @@ function App() {
             <Spinner />
           ) : (
             <>
-              <Header onLogout={handleLogout} />
+              <Header username={username} onLogout={handleLogout} />
               <div>
                 <Sidebar />
                 <div>

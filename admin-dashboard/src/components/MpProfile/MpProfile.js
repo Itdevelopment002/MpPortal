@@ -1,97 +1,142 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import GLightbox from "glightbox";
-import "glightbox/dist/css/glightbox.min.css";
+import { Link, useNavigate } from "react-router-dom";
+import api, { baseURLImage } from "../api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import api, { baseURLImage } from "../api";
+import GLightbox from "glightbox";
+import "glightbox/dist/css/glightbox.min.css";
 
 const MpProfile = () => {
+  const [descriptionData, setDescriptionData] = useState([]);
+  const [mpData, setMpData] = useState([]);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [mpProfile, setMpProfile] = useState([]);
-  const [editData, setEditData] = useState({
-    name: "",
-    designation: "",
-    info: "",
-    image: null,
-  });
-  const [imagePreview, setImagePreview] = useState(null);
+  const [modalType, setModalType] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [editData, setEditData] = useState({});
+  const [imagePreview, setImagePreview] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const lightbox = GLightbox({ selector: ".glightbox" });
+    fetchDescriptionData();
+    fetchMpData();
+  }, []);
+
+  useEffect(() => {
+    const lightbox = GLightbox({
+      selector: ".glightbox",
+    });
     return () => {
       lightbox.destroy();
     };
-  }, [mpProfile]);
+  }, [mpData]);
 
-  const fetchMpProfile = () => {
-    api
-      .get("/mp-profile")
-      .then((response) => setMpProfile(response.data))
-      .catch((error) => {
-        console.error("Error fetching mp profile!", error);
-        toast.error("Failed to load mp profile.");
-      });
+  const fetchDescriptionData = async () => {
+    try {
+      const response = await api.get("/mp-profile-desc");
+      console.log(response.data);
+      setDescriptionData(response.data);
+    } catch (error) {
+      toast.error("Failed to fetch description data!");
+    }
   };
 
-  useEffect(() => {
-    fetchMpProfile();
-  }, []);
+  const fetchMpData = async () => {
+    try {
+      const response = await api.get("/mp-profile");
+      setMpData(response.data);
+    } catch (error) {
+      toast.error("Failed to fetch MP data!");
+    }
+  };
 
-  const handleEditModalOpen = (mpprofile) => {
-    setEditData(mpprofile);
-    setImagePreview(`${baseURLImage}${mpprofile.image_path}`);
+  const openEditModal = (item, type) => {
+    setSelectedItem(item);
+    setEditData(
+      type === "description" ? { description: item.description } : { ...item }
+    );
+    setImagePreview(type === "mp" ? `${baseURLImage}${item.image_path}` : "");
+    setModalType(type);
     setShowEditModal(true);
   };
 
-  const handleEditSubmit = async () => {
-    const formData = new FormData();
-    formData.append("name", editData.name);
-    formData.append("designation", editData.designation);
-    formData.append("info", editData.info);
-    if (editData.image) {
-      formData.append("image", editData.image);
-    }
-
-    try {
-      await api.put(`/mp-profile/${editData.id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      fetchMpProfile();
-      setShowEditModal(false);
-      toast.success("Mp Profile updated successfully!");
-    } catch (error) {
-      console.error("Error updating mp profile!", error);
-      toast.error("Failed to update mp profile.");
-    }
+  const closeModal = () => {
+    setShowEditModal(false);
+    setSelectedItem(null);
+    setEditData({});
+    setImagePreview("");
   };
 
-  const handleCloseEditModal = () => {
-    setShowEditModal(false);
-    setEditData({ name: "", designation: "", info: "", image: null });
-    setImagePreview(null);
+  const handleSaveChanges = async () => {
+    try {
+      if (modalType === "description") {
+        await api.put(`/mp-profile-desc/${selectedItem.id}`, {
+          description: editData.description,
+        });
+        setDescriptionData(
+          descriptionData.map((item) =>
+            item.id === selectedItem.id
+              ? { ...item, description: editData.description }
+              : item
+          )
+        );
+        fetchDescriptionData();
+      } else if (modalType === "mp") {
+        const formData = new FormData();
+        formData.append("name", editData.name);
+        formData.append("designation", editData.designation);
+
+        if (editData.imageFile) {
+          formData.append("image", editData.imageFile);
+        }
+
+        await api.put(`/mp-profile/${selectedItem.id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        setMpData(
+          mpData.map((item) =>
+            item.id === selectedItem.id ? { ...item, ...editData } : item
+          )
+        );
+        fetchMpData();
+      }
+      toast.success(
+        `${
+          modalType === "description" ? "Description" : "MP"
+        } updated successfully!`
+      );
+      navigate("/mp-profile");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update the entry!");
+    }
+    closeModal();
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setEditData({ ...editData, image: file });
-      setImagePreview(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+        setEditData({ ...editData, imageFile: file });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   return (
-    <>
+    <div>
       <div className="page-wrapper">
         <div className="content">
           <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link to="/home">Home</Link>{" "}
+                <Link to="/home">Home</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">
-                Mp Profile
+                MP Profile
               </li>
             </ol>
           </nav>
@@ -101,51 +146,97 @@ const MpProfile = () => {
                 <div className="card-block">
                   <div className="row">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Mp Profile</h4>
+                      <h4 className="page-title">MP Profile</h4>
                     </div>
                   </div>
                   <div className="table-responsive m-t-10">
                     <table className="table table-bordered m-b-0">
                       <thead>
                         <tr>
-                          <th width='7%'>Sr. No.</th>
+                          <th width="10%">Sr. No.</th>
                           <th>Name</th>
                           <th>Designation</th>
-                          <th>Description</th>
-                          <th width='11%'>Profile Image</th>
-                          <th>Action</th>
+                          <th>Image</th>
+                          <th width="15%">Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {mpProfile.map((profile, index) => (
-                          <tr key={profile.id}>
-                            <td>{index + 1}</td>
-                            <td className="mpprofile-items">{profile.name}</td>
-                            <td className="mpprofile-items">{profile.designation}</td>
-                            <td className="mpprofile-items">{profile.info}</td>
-                            <td>
-                              <Link
-                                to={`${baseURLImage}${profile.image_path}`}
-                                className="glightbox"
-                                data-gallery="slider-images"
-                              >
-                                <img
-                                  width="50px"
-                                  src={`${baseURLImage}${profile.image_path}`}
-                                  alt={`profile-img${profile.image_path}`}
-                                />
-                              </Link>
-                            </td>
-                            <td>
-                              <button
-                                className="btn btn-success btn-sm"
-                                onClick={() => handleEditModalOpen(profile)}
-                              >
-                                Edit
-                              </button>
-                            </td>
+                        {mpData.length > 0 ? (
+                          mpData.map((item, index) => (
+                            <tr key={item.id}>
+                              <td>{index + 1}</td>
+                              <td>{item.name}</td>
+                              <td>{item.designation}</td>
+                              <td>
+                                <Link
+                                  className="glightbox"
+                                  to={`${baseURLImage}${item.image_path}`}
+                                >
+                                  <img
+                                    src={`${baseURLImage}${item.image_path}`}
+                                    alt={item.name}
+                                    style={{
+                                      width: "75px",
+                                    }}
+                                  />
+                                </Link>
+                              </td>
+                              <td>
+                                <button
+                                  onClick={() => openEditModal(item, "mp")}
+                                  className="btn btn-success btn-sm m-t-10"
+                                >
+                                  Edit
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="6">No Mp Profile Data Available</td>
                           </tr>
-                        ))}
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="row m-t-50">
+                    <div className="col-sm-4 col-3">
+                      <h4 className="page-title">Mp Profile Description</h4>
+                    </div>
+                  </div>
+                  <div className="table-responsive">
+                    <table className="table table-bordered m-b-0">
+                      <thead>
+                        <tr>
+                          <th width="10%">Sr. No.</th>
+                          <th>Description</th>
+                          <th width="15%">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {descriptionData.length > 0 ? (
+                          descriptionData.map((item, index) => (
+                            <tr key={item.id}>
+                              <td>{index + 1}</td>
+                              <td>{item.description}</td>
+                              <td>
+                                <button
+                                  onClick={() =>
+                                    openEditModal(item, "description")
+                                  }
+                                  className="btn btn-success btn-sm m-t-10"
+                                >
+                                  Edit
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="3">No Description Data Available</td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -155,88 +246,109 @@ const MpProfile = () => {
           </div>
 
           {showEditModal && (
-            <div className="modal fade show d-block" tabIndex="-1">
+            <div
+              className="modal fade show"
+              style={{
+                display: "block",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                overflowY: "scroll",
+                scrollbarWidth: "none",
+              }}
+            >
               <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Edit Profile</h5>
+                    <h5 className="modal-title">
+                      {modalType === "description"
+                        ? "Edit MP Description"
+                        : "Edit MP Profile"}
+                    </h5>
                   </div>
                   <div className="modal-body">
-                    <form>
+                    {modalType === "description" ? (
                       <div className="form-group">
-                        <label>Name</label>
-                        <input
-                          type="text"
+                        <label htmlFor="description">Description</label>
+                        <textarea
                           className="form-control"
-                          value={editData.name}
+                          id="description"
+                          value={editData.description}
                           onChange={(e) =>
                             setEditData({
                               ...editData,
-                              name: e.target.value,
+                              description: e.target.value,
                             })
                           }
                         />
                       </div>
-                      <div className="form-group">
-                        <label>Designation</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={editData.designation}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              designation: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Description</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={editData.info}
-                          onChange={(e) =>
-                            setEditData({
-                              ...editData,
-                              info: e.target.value,
-                            })
-                          }
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label>Image</label>
-                        <input
-                          type="file"
-                          className="form-control"
-                          onChange={handleImageChange}
-                        />
-                        {imagePreview && (
-                          <img
-                            src={imagePreview}
-                            alt="preview"
-                            width="100"
-                            className="mt-2"
+                    ) : (
+                      <>
+                        <div className="form-group">
+                          <label htmlFor="coName">Name</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="name"
+                            value={editData.name}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                name: e.target.value,
+                              })
+                            }
                           />
-                        )}
-                      </div>
-                    </form>
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="designation">Designation</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="designation"
+                            value={editData.designation}
+                            onChange={(e) =>
+                              setEditData({
+                                ...editData,
+                                designation: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="image">Image</label>
+                          <input
+                            type="file"
+                            className="form-control"
+                            id="image"
+                            onChange={handleImageChange}
+                          />
+                          {imagePreview && (
+                            <img
+                              src={imagePreview}
+                              alt="Preview"
+                              style={{
+                                width: "100px",
+                                height: "100px",
+                                marginTop: "10px",
+                              }}
+                            />
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
                   <div className="modal-footer">
                     <button
                       type="button"
-                      className="btn btn-sm btn-secondary"
-                      onClick={handleCloseEditModal}
+                      className="btn btn-secondary btn-sm"
+                      onClick={closeModal}
                     >
                       Close
                     </button>
                     <button
                       type="button"
-                      className="btn btn-sm btn-primary"
-                      onClick={handleEditSubmit}
+                      className="btn btn-primary btn-sm"
+                      onClick={handleSaveChanges}
                     >
-                      Save changes
+                      Save Changes
                     </button>
                   </div>
                 </div>
@@ -246,7 +358,7 @@ const MpProfile = () => {
         </div>
       </div>
       <ToastContainer />
-    </>
+    </div>
   );
 };
 
