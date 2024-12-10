@@ -119,20 +119,6 @@ const Header = ({ onLogout, userDepartment }) => {
                     My Profile
                   </Link>
                   <Link
-                    className={`dropdown-item ${activeDropdownItem === "Edit Profile" ? "active" : ""}`}
-                    to="#."
-                    onClick={() => handleDropdownItemClick("Edit Profile")}
-                  >
-                    Edit Profile
-                  </Link>
-                  <Link
-                    className={`dropdown-item ${activeDropdownItem === "Settings" ? "active" : ""}`}
-                    to="#."
-                    onClick={() => handleDropdownItemClick("Settings")}
-                  >
-                    Settings
-                  </Link>
-                  <Link
                     className={`dropdown-item ${activeDropdownItem === "Logout" ? "active" : ""}`}
                     to="#."
                     onClick={onLogout}
@@ -164,20 +150,6 @@ const Header = ({ onLogout, userDepartment }) => {
                     onClick={() => handleDropdownItemClick("My Profile")}
                   >
                     My Profile
-                  </Link>
-                  <Link
-                    className={`dropdown-item ${activeDropdownItem === "Edit Profile" ? "active" : ""}`}
-                    to="#."
-                    onClick={() => handleDropdownItemClick("Edit Profile")}
-                  >
-                    Edit Profile
-                  </Link>
-                  <Link
-                    className={`dropdown-item ${activeDropdownItem === "Settings" ? "active" : ""}`}
-                    to="#."
-                    onClick={() => handleDropdownItemClick("Settings")}
-                  >
-                    Settings
                   </Link>
                   <Link
                     className={`dropdown-item ${activeDropdownItem === "Logout" ? "active" : ""}`}

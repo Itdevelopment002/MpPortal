@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-// import Footer from './Footer';
 import Carousel from "../Carousel/Carousel";
 import Gallery from "../Gallary/Gallery";
-import praniti from "../../assets/images/landing/praniti-shinde.png";
-// import Heading from './Heading';
-import api from "../../api";
+import api, { baseURLImage } from "../../api";
 
 const Main = () => {
   const [profile, setProfile] = useState([]);
@@ -32,7 +29,7 @@ const Main = () => {
             <div className="col-xl-3">
               <div className="home-proving-image">
                 <img
-                  src={praniti}
+                  src={`${baseURLImage}${profile[0]?.image_path}`}
                   alt="about-img"
                   className="img-fluid pt-3 about-image d-none d-xl-block"
                 />

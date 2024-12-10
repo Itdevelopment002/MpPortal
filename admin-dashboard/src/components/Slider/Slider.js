@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api, { baseURL } from "../api";
+import api, { baseURLImage } from "../api";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
@@ -155,13 +155,13 @@ const Slider = () => {
                             <td>{slider.slider_name}</td>
                             <td>
                               <Link
-                                to={`http://localhost:5000${slider.file_path}`}
+                                to={`${baseURLImage}${slider.file_path}`}
                                 className="glightbox"
                                 data-gallery="slider-images"
                               >
                                 <img
                                   width="100px"
-                                  src={`http://localhost:5000${slider.file_path}`}
+                                  src={`${baseURLImage}${slider.file_path}`}
                                   alt={`slider${index + 1}`}
                                 />
                               </Link>

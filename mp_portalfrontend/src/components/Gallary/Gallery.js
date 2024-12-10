@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import api from "../../api"; // Adjust this path based on your API setup
+import api, { baseURLImage } from "../../api"; // Adjust this path based on your API setup
 import "./Gallary.css";
 
 const Gallery = () => {
@@ -73,7 +73,7 @@ const Gallery = () => {
           {gallery.map((img, index) => (
             <div key={index} className="col-lg-3 col-md-3 col-sm-6 col-6">
               <a href="#!" onClick={() => openModal(index)} className="glightbox card">
-                <img src={`http://localhost:5000${img.file_path}`} alt={`image ${index + 1}`} className="img-fluid" />
+                <img src={`${baseURLImage}${img.file_path}`} alt={`image ${index + 1}`} className="img-fluid" />
               </a>
             </div>
           ))}
@@ -93,7 +93,7 @@ const Gallery = () => {
                       key={index}
                       className={`carousel-item ${index === selectedImageIndex ? "active" : ""}`}
                     >
-                      <img src={`http://localhost:5000${imgSrc.file_path}`} className="d-block w-100" alt={`image ${index + 1}`} />
+                      <img src={`${baseURLImage}${imgSrc.file_path}`} className="d-block w-100" alt={`image ${index + 1}`} />
                     </div>
                   ))}
                 </div>

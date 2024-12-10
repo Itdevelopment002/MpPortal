@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api, { baseURL } from "../api";
+import api, { baseURLImage } from "../api";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.css";
@@ -165,7 +165,7 @@ const HeaderModel = () => {
                             <td>{header.govtname}</td>
                             <td>
                               <Link
-                                to={`${baseURL.replace(/\/$/, "")}${
+                                to={`${baseURLImage}${
                                   header.websitelogo
                                 }`}
                                 className="glightbox"
@@ -173,7 +173,7 @@ const HeaderModel = () => {
                               >
                                 <img
                                   width="100px"
-                                  src={`${baseURL.replace(/\/$/, "")}${
+                                  src={`${baseURLImage}${
                                     header.websitelogo
                                   }`}
                                   alt={header.id}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import api from "../../api";
+import api, { baseURLImage } from "../../api";
 
 const Carousel = () => {
   const [slider, setSlider] = useState([]);
@@ -32,7 +32,7 @@ const Carousel = () => {
             key={index}
           >
             <img
-              src={`http://localhost:5000${sliderItem.file_path}`}
+              src={`${baseURLImage}${sliderItem.file_path}`}
               className="d-block w-100"
               alt={`slider-${index + 1}`}
             />

@@ -4,7 +4,7 @@ import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import api, { baseURL } from "../api";
+import api, { baseURLImage } from "../api";
 
 const LoginForm = () => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -39,7 +39,7 @@ const LoginForm = () => {
 
   const handleEditModalOpen = (form) => {
     setEditData(form);
-    setImagePreview(`${baseURL}${form.image_path}`);
+    setImagePreview(`${baseURLImage}${form.image_path}`);
     setShowEditModal(true);
   };
 
@@ -118,13 +118,13 @@ const LoginForm = () => {
                             <td>{form.title}</td>
                             <td>
                               <Link
-                                to={`http://localhost:5000${form.image_path}`}
+                                to={`${baseURLImage}${form.image_path}`}
                                 className="glightbox"
                                 data-gallery="slider-images"
                               >
                                 <img
-                                  width="50px"
-                                  src={`http://localhost:5000${form.image_path}`}
+                                  width="100px"
+                                  src={`${baseURLImage}${form.image_path}`}
                                   alt={`form-img${form.image_path}`}
                                 />
                               </Link>
