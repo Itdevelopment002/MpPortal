@@ -20,15 +20,12 @@ router.post("/login-form", upload.single("image"), (req, res) => {
   const { title } = req.body;
 
   if (!title) {
-    return res
-      .status(400)
-      .json({ message: "Title is required" });
+    return res.status(400).json({ message: "Title is required" });
   }
 
   const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
-  const sql =
-    "INSERT INTO login_form (title, image_path) VALUES (?, ?)";
+  const sql = "INSERT INTO login_form (title, image_path) VALUES (?, ?)";
   db.query(sql, [title, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });

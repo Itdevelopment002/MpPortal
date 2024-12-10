@@ -9,16 +9,13 @@ const AddWhatsAppGroup = () => {
   const [formData, setFormData] = useState({ id: null, group_name: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false); // To control the edit modal
+  const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const[Error, setError]=useState({group_name:""});
+  const [Error, setError] = useState({ group_name: "" });
 
-  // Fetch Personal Assistants
   const fetchGroups = async () => {
     try {
-      const response = await api.get(
-        "/whatsapp_groups"
-      );
+      const response = await api.get("/whatsapp_groups");
       setGroups(response.data);
     } catch (error) {
       console.error("Error fetching groups:", error);
@@ -29,77 +26,60 @@ const AddWhatsAppGroup = () => {
     fetchGroups();
   }, []);
 
+  const validateForm = () => {
+    const newError = { group_name: "" };
+    let isValid = true;
 
-  //validation
+    if (!formData.group_name.trim()) {
+      newError.group_name = "*group name is required";
+      isValid = false;
+    }
 
-const validateForm=()=>{
-  const newError={group_name:""};
-  let isValid=true;
+    setError(newError);
+    return isValid;
+  };
 
-  if(!formData.group_name.trim()){
-    newError.group_name="*group name is required";
-    isValid=false;
-  }
+  const handleFocus = (field) => {
+    setError((prevError) => ({ ...prevError, [field]: "" }));
+  };
 
-  setError(newError);
-  return isValid;
-}
-
-//handle Foucus
-
-const handleFocus=(field)=>{
-  setError((prevError)=>({...prevError,[field]:""}));
-}
-  
-
-
-
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if(name==="group_name"){
-      if(/^[A-Za-z\s]*$/.test(value)|| value === ""){
-    setFormData({ ...formData, [name]: value });
+    if (name === "group_name") {
+      if (/^[A-Za-z\s]*$/.test(value) || value === "") {
+        setFormData({ ...formData, [name]: value });
       }
     }
   };
- 
-  // Handle form submission for adding or updating
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validateForm()){
+    if (!validateForm()) {
       return;
     }
     try {
       if (isEditing) {
-        await api.put(
-          `/whatsapp_groups/${formData.id}`,
-          formData
-        );
+        await api.put(`/whatsapp_groups/${formData.id}`, formData);
       } else {
         await api.post("/whatsapp_groups", formData);
       }
       resetForm();
       fetchGroups();
-      setShowEditModal(false); 
+      setShowEditModal(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
-  // Handle edit action and show modal
   const handleEdit = (group) => {
-    setFormData(group); 
+    setFormData(group);
     setIsEditing(true);
-    setShowEditModal(true); 
+    setShowEditModal(true);
   };
 
-  // Handle delete confirmation
   const handleDelete = async () => {
     try {
-      await api.delete(
-        `/whatsapp_groups/${deleteId}`
-      );
+      await api.delete(`/whatsapp_groups/${deleteId}`);
       fetchGroups();
       setShowDeleteModal(false);
     } catch (error) {
@@ -107,7 +87,6 @@ const handleFocus=(field)=>{
     }
   };
 
-  // Reset form and states
   const resetForm = () => {
     setFormData({ id: null, group_name: "" });
     setIsEditing(false);
@@ -116,7 +95,6 @@ const handleFocus=(field)=>{
     <>
       <div class="main-content app-content">
         <div class="container-fluid">
-          {/* <!-- Page Header --> */}
           <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
             <div>
               <nav>
@@ -132,9 +110,6 @@ const handleFocus=(field)=>{
               </nav>
             </div>
           </div>
-          {/* <!-- Page Header Close -->
-
-        <!-- Start::row-1 --> */}
           <div class="row">
             <div class="col-xl-12">
               <div class="card custom-card">
@@ -150,10 +125,13 @@ const handleFocus=(field)=>{
                           value={formData.group_name}
                           onChange={handleChange}
                           placeholder="Enter Whatsapp Group"
-                          onFocus={()=>handleFocus('group_name')}
+                          onFocus={() => handleFocus("group_name")}
                         />
-                        {Error.group_name && <p style={{ color: "red", fontSize: "11px" }}>{Error.group_name}</p>}
-
+                        {Error.group_name && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.group_name}
+                          </p>
+                        )}
                       </div>
                       <div className="mt-5 col-xl-4">
                         <button className="btn btn-purple-gradient">
@@ -229,7 +207,6 @@ const handleFocus=(field)=>{
         <div className="modal-backdrop fade show"></div>
       )}
 
-      {/* Edit Modal */}
       {showEditModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">

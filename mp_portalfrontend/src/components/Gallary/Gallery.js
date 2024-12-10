@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import api, { baseURLImage } from "../../api"; // Adjust this path based on your API setup
+import api, { baseURLImage } from "../../api";
 import "./Gallary.css";
 
 const Gallery = () => {
@@ -9,11 +9,10 @@ const Gallery = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef(null);
 
-  // Fetch images from the server
   const fetchGallery = async () => {
     try {
       const response = await api.get("/gallerys");
-      setGallery(response.data); // Assuming `response.data` is an array of image URLs
+      setGallery(response.data);
     } catch (error) {
       console.error("Error fetching gallery data", error);
     }
@@ -33,13 +32,15 @@ const Gallery = () => {
   };
 
   const nextImage = (event) => {
-    event.stopPropagation(); // Prevent click from propagating to the document
+    event.stopPropagation();
     setSelectedImageIndex((selectedImageIndex + 1) % gallery.length);
   };
 
   const prevImage = (event) => {
-    event.stopPropagation(); // Prevent click from propagating to the document
-    setSelectedImageIndex((selectedImageIndex - 1 + gallery.length) % gallery.length);
+    event.stopPropagation();
+    setSelectedImageIndex(
+      (selectedImageIndex - 1 + gallery.length) % gallery.length
+    );
   };
 
   useEffect(() => {
@@ -65,41 +66,59 @@ const Gallery = () => {
       <div className="container">
         <div className="text-center">
           <p className="fs-15 fw-medium text-success mb-1">
-            <span className="landing-section-heading text-danger">Awesome Picture</span>
+            <span className="landing-section-heading text-danger">
+              Awesome Picture
+            </span>
           </p>
           <h4 className="fw-semibold mt-3 mb-3">Gallery</h4>
         </div>
         <div className="row">
           {gallery.map((img, index) => (
             <div key={index} className="col-lg-3 col-md-3 col-sm-6 col-6">
-              <a href="#!" onClick={() => openModal(index)} className="glightbox card">
-                <img src={`${baseURLImage}${img.file_path}`} alt={`image ${index + 1}`} className="img-fluid" />
+              <a
+                href="#!"
+                onClick={() => openModal(index)}
+                className="glightbox card"
+              >
+                <img
+                  src={`${baseURLImage}${img.file_path}`}
+                  alt={`image-${index + 1}`}
+                  className="img-fluid"
+                />
               </a>
             </div>
           ))}
         </div>
 
-        {/* Modal with Carousel */}
         {isModalOpen && (
           <div className="modal-overlay" role="dialog">
             <button type="button" className="close-modal" onClick={closeModal}>
               <span aria-hidden="true">&times;</span>
             </button>
-            <div className="modal-dialog modal-dialog-centered" role="document" ref={modalRef}>
+            <div
+              className="modal-dialog modal-dialog-centered"
+              role="document"
+              ref={modalRef}
+            >
               <div id="carouselExample" className="carousel slide">
                 <div className="carousel-inner">
                   {gallery.map((imgSrc, index) => (
                     <div
                       key={index}
-                      className={`carousel-item ${index === selectedImageIndex ? "active" : ""}`}
+                      className={`carousel-item ${
+                        index === selectedImageIndex ? "active" : ""
+                      }`}
                     >
-                      <img src={`${baseURLImage}${imgSrc.file_path}`} className="d-block w-100" alt={`image ${index + 1}`} />
+                      <img
+                        src={`${baseURLImage}${imgSrc.file_path}`}
+                        className="d-block w-100"
+                        alt={`image-${index + 1}`}
+                      />
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            {/* Carousel controls */}
             <button
               className="carousel-control-prev"
               onMouseDown={prevImage}

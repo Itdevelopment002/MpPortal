@@ -42,7 +42,6 @@ router.put("/footer/:id", (req, res) => {
   const { id } = req.params;
   const { websitename, developedby } = req.body;
 
-  // Ensure the table name is correct
   const sql = "UPDATE footer SET websitename = ?, developedby = ? WHERE id = ?";
   db.query(sql, [websitename, developedby, id], (err, result) => {
     if (err) {
@@ -50,7 +49,6 @@ router.put("/footer/:id", (req, res) => {
       return res.status(500).json({ error: "Failed to update footer" });
     }
 
-    // Check if any rows were affected (i.e., if the ID exists)
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Footer not found" });
     }
@@ -58,6 +56,5 @@ router.put("/footer/:id", (req, res) => {
     res.json({ message: "Footer updated successfully" });
   });
 });
-
 
 module.exports = router;

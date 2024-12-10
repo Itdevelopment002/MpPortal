@@ -58,7 +58,9 @@ const PhotoGallery = () => {
   const confirmDelete = async () => {
     try {
       await api.delete(`/gallerys/${selectedGallery.id}`);
-      setGallerys(gallerys.filter((gallery) => gallery.id !== selectedGallery.id));
+      setGallerys(
+        gallerys.filter((gallery) => gallery.id !== selectedGallery.id)
+      );
       toast.success("Gallery deleted successfully!");
       setShowDeleteModal(false);
       setSelectedGallery(null);
@@ -152,7 +154,9 @@ const PhotoGallery = () => {
                       <tbody>
                         {currentPageData.map((gallery, index) => (
                           <tr key={gallery.id}>
-                            <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                            <td>
+                              {(currentPage - 1) * itemsPerPage + index + 1}
+                            </td>
                             <td>{gallery.photo_name}</td>
                             <td>
                               <Link
@@ -168,7 +172,7 @@ const PhotoGallery = () => {
                               </Link>
                             </td>
                             <td>
-                            <button
+                              <button
                                 className="btn btn-success btn-sm m-t-10"
                                 onClick={() => handleEdit(gallery)}
                               >
@@ -180,7 +184,6 @@ const PhotoGallery = () => {
                               >
                                 Delete
                               </button>
-                              
                             </td>
                           </tr>
                         ))}
@@ -192,33 +195,59 @@ const PhotoGallery = () => {
             </div>
           </div>
 
-          {/* Pagination */}
           <div>
             <ul className="pagination">
-              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => handlePageChange(currentPage - 1)}>
+              <li
+                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                >
                   Previous
                 </button>
               </li>
               {Array.from({ length: totalPages }, (_, i) => (
-                <li key={i + 1} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
-                  <button className="page-link" onClick={() => handlePageChange(i + 1)}>
+                <li
+                  key={i + 1}
+                  className={`page-item ${
+                    currentPage === i + 1 ? "active" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => handlePageChange(i + 1)}
+                  >
                     {i + 1}
                   </button>
                 </li>
               ))}
-              <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-                <button className="page-link" onClick={() => handlePageChange(currentPage + 1)}>
+              <li
+                className={`page-item ${
+                  currentPage === totalPages ? "disabled" : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                >
                   Next
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Delete Modal */}
           {showDeleteModal && (
-            <div className="modal fade show" style={{ display: "block" }} tabIndex="-1" role="dialog">
-              <div className="modal-dialog modal-dialog-centered" role="document">
+            <div
+              className="modal fade show"
+              style={{ display: "block" }}
+              tabIndex="-1"
+              role="dialog"
+            >
+              <div
+                className="modal-dialog modal-dialog-centered"
+                role="document"
+              >
                 <div className="modal-content">
                   <div className="modal-body text-center">
                     <h5>Are you sure you want to delete this item?</h5>
@@ -245,10 +274,17 @@ const PhotoGallery = () => {
             </div>
           )}
 
-          {/* Edit Modal */}
           {showEditModal && (
-            <div className="modal fade show" style={{ display: "block" }} tabIndex="-1" role="dialog">
-              <div className="modal-dialog modal-dialog-centered" role="document">
+            <div
+              className="modal fade show"
+              style={{ display: "block" }}
+              tabIndex="-1"
+              role="dialog"
+            >
+              <div
+                className="modal-dialog modal-dialog-centered"
+                role="document"
+              >
                 <div className="modal-content">
                   <div className="modal-header">
                     <h5 className="modal-title">Edit Gallery</h5>
@@ -280,7 +316,11 @@ const PhotoGallery = () => {
                       <img
                         src={selectedGallery.image}
                         alt="Selected"
-                        style={{ width: "100%", height: "auto", marginTop: "10px" }}
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          marginTop: "10px",
+                        }}
                       />
                     )}
                   </div>
@@ -292,7 +332,11 @@ const PhotoGallery = () => {
                     >
                       Close
                     </button>
-                    <button type="button" className="btn btn-sm btn-primary" onClick={handleSaveEdit}>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary"
+                      onClick={handleSaveEdit}
+                    >
                       Save Changes
                     </button>
                   </div>

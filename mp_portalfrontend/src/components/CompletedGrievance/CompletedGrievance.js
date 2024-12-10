@@ -3,13 +3,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa"; // Import sorting icons
+import { FaSortUp, FaSortDown, FaSort } from "react-icons/fa";
 import api from "../../api";
 import * as XLSX from "xlsx";
 import autoTable from "jspdf-autotable";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import '../../assets/css/clipboard.css'
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import "../../assets/css/clipboard.css";
 
 const CompletedGrievance = () => {
   const [grievances, setGrievances] = useState([]);
@@ -84,7 +84,6 @@ const CompletedGrievance = () => {
     setSearchTerm("");
   };
 
-  // Print code
   const handlePrint = () => {
     const printWindow = window.open("", "", "width=800,height=600");
 
@@ -125,23 +124,31 @@ const CompletedGrievance = () => {
               </tr>
             </thead>
             <tbody>
-              ${grievances.map((grievance, index) => `
+              ${grievances
+                .map(
+                  (grievance, index) => `
                 <tr>
-                  <td>${(index + 1 + offset).toString().padStart(2, '0')}</td>
+                  <td>${(index + 1 + offset).toString().padStart(2, "0")}</td>
                   <td>${grievance.inwardNo}</td>
                   <td>${grievance.subject}</td>
                   <td>${grievance.fullName}</td>
                   <td>${grievance.handledBy}</td>
                   <td>${grievance.complaintSentTo}</td>
-                  <td>${new Date(grievance.date).toLocaleDateString("en-GB", {
-                                  day: "2-digit",     // To get the day as two digits (e.g., 24)
-                                  month: "short",     // To get the short form of the month (e.g., Aug)
-                                  year: "numeric",    // To get the year as a four-digit number (e.g., 2024)
-                                }).replace(/ /g, ', ')}</td>
+                  <td>${new Date(grievance.date)
+                    .toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                    .replace(/ /g, ", ")}</td>
                   <td>21,Oct,2024</td>
-                  <td><span class="badge bg-danger">${grievance.applicationStatus}</span></td>
+                  <td><span class="badge bg-danger">${
+                    grievance.applicationStatus
+                  }</span></td>
                 </tr>
-              `).join("")}
+              `
+                )
+                .join("")}
             </tbody>
           </table>
         </body>
@@ -155,50 +162,64 @@ const CompletedGrievance = () => {
     printWindow.close();
   };
 
-
-
   const [showPopup, setShowPopup] = useState(false);
   const copyToClipboard = () => {
-    const tableHeadings = 'Sr. No.\tInward No.\tSubject\tComplainer\tHandled By\tComplaint Sent to\tReceive Date\tClosed Date\tStatus';
-  
+    const tableHeadings =
+      "Sr. No.\tInward No.\tSubject\tComplainer\tHandled By\tComplaint Sent to\tReceive Date\tClosed Date\tStatus";
+
     const dataStr = grievances
       .map(
         (grievance, index) =>
-          `${(index + 1 + offset).toString().padStart(2, '0')}\t${grievance.inwardNo}\t${grievance.subject}\t${grievance.fullName}\t${grievance.handledBy}\t${grievance.complaintSentTo}\t${new Date(grievance.date).toLocaleDateString("en-GB", {
-            day: "2-digit",     
-            month: "short",     
-            year: "numeric",    
-          }).replace(/ /g, ', ')}\t${'21,Oct,2024'}\t${grievance.applicationStatus}`
+          `${(index + 1 + offset).toString().padStart(2, "0")}\t${
+            grievance.inwardNo
+          }\t${grievance.subject}\t${grievance.fullName}\t${
+            grievance.handledBy
+          }\t${grievance.complaintSentTo}\t${new Date(grievance.date)
+            .toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
+            .replace(/ /g, ", ")}\t${"21,Oct,2024"}\t${
+            grievance.applicationStatus
+          }`
       )
-      .join('\n');
-  
+      .join("\n");
+
     const fullDataStr = `${tableHeadings}\n${dataStr}`;
-  
+
     navigator.clipboard
       .writeText(fullDataStr)
       .then(() => {
         setShowPopup(true);
         setTimeout(() => {
-          setShowPopup(false); // Hide popup after 1.5 seconds
+          setShowPopup(false);
         }, 1500);
       })
       .catch((err) => {
-        console.error('Failed to copy data: ', err);
+        console.error("Failed to copy data: ", err);
       });
   };
-  
 
-
-  // Function to download CSV
   const downloadCSV = () => {
-    const csvContent = "data:text/csv;charset=utf-8," +
-      grievances.map(grievance =>
-        `${grievance.inwardNo},${grievance.subject},${grievance.fullName},${grievance.handledBy},${grievance.complaintSentTo},${new Date(grievance.date).toLocaleDateString("en-GB", {
-          day: "2-digit",     // To get the day as two digits (e.g., 24)
-          month: "short",     // To get the short form of the month (e.g., Aug)
-          year: "numeric",    // To get the year as a four-digit number (e.g., 2024)
-        }).replace(/ /g, ', ')},${'21,Oct,2024'},${grievance.applicationStatus}`
-      ).join("\n");
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      grievances
+        .map(
+          (grievance) =>
+            `${grievance.inwardNo},${grievance.subject},${grievance.fullName},${
+              grievance.handledBy
+            },${grievance.complaintSentTo},${new Date(grievance.date)
+              .toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              })
+              .replace(/ /g, ", ")},${"21,Oct,2024"},${
+              grievance.applicationStatus
+            }`
+        )
+        .join("\n");
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
@@ -209,29 +230,26 @@ const CompletedGrievance = () => {
     document.body.removeChild(link);
   };
 
-  // Excel download Code
   const downloadExcel = () => {
-    // 1. Add S.No. column with proper indexing
     const formattedGrievances = grievances.map((grievance, index) => ({
-      "S.No.": (index + 1 + offset).toString().padStart(2, '0'),
+      "S.No.": (index + 1 + offset).toString().padStart(2, "0"),
       "Inward No.": grievance.inwardNo,
-      "Subject": grievance.subject,
-      "Complainer": grievance.fullName,
+      Subject: grievance.subject,
+      Complainer: grievance.fullName,
       "Handled By": grievance.handledBy,
       "Complaint Sent to": grievance.complaintSentTo,
-      "Receive Date":new Date(grievance.date).toLocaleDateString("en-GB", {
-        day: "2-digit",     // To get the day as two digits (e.g., 24)
-        month: "short",     // To get the short form of the month (e.g., Aug)
-        year: "numeric",    // To get the year as a four-digit number (e.g., 2024)
-      }).replace(/ /g, ', '),
+      "Receive Date": new Date(grievance.date)
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, ", "),
       "Closed Date": "21,Oct,2024",
-      "Status": grievance.applicationStatus,
+      Status: grievance.applicationStatus,
     }));
-
-    // 2. Create a worksheet with the formatted data
     const ws = XLSX.utils.json_to_sheet(formattedGrievances);
 
-    // 3. Customize column widths for better readability
     const wscols = [
       { wpx: 50 },
       { wpx: 150 },
@@ -244,73 +262,79 @@ const CompletedGrievance = () => {
       { wpx: 250 },
       { wpx: 100 },
     ];
-    ws['!cols'] = wscols;
+    ws["!cols"] = wscols;
 
-
-    // 4. Create a new workbook and append the worksheet
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Completed Grievances");
 
-    // 5. Save the Excel file
     XLSX.writeFile(wb, "completed_grievances.xlsx");
   };
 
-
-  // Download Pdf Code
   const downloadPDF = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
 
-    // Title
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
 
-    // Calculate the center position for the title text
-    const title = 'Citizen Grievance Management System';
+    const title = "Citizen Grievance Management System";
     const titleWidth = doc.getTextWidth(title);
-    const titleXPosition = (pageWidth - titleWidth) / 2; // Center the title text
+    const titleXPosition = (pageWidth - titleWidth) / 2;
 
-    doc.text(title, titleXPosition, 15); // Title text in the center
+    doc.text(title, titleXPosition, 15);
 
     autoTable(doc, {
-      head: [['Sr. No.', 'Inward No.', 'Subject', 'Complainer', 'Handled By', 'Complaint Sent to', 'Receive Date', 'Closed Date', 'Status']],
+      head: [
+        [
+          "Sr. No.",
+          "Inward No.",
+          "Subject",
+          "Complainer",
+          "Handled By",
+          "Complaint Sent to",
+          "Receive Date",
+          "Closed Date",
+          "Status",
+        ],
+      ],
       body: grievances.map((grievance, index) => [
-        (index + 1 + offset).toString().padStart(2, '0'),
+        (index + 1 + offset).toString().padStart(2, "0"),
         grievance.inwardNo,
         grievance.subject,
         grievance.fullName,
         grievance.handledBy,
         grievance.complaintSentTo,
-        new Date(grievance.date).toLocaleDateString("en-GB", {
-          day: "2-digit",     
-          month: "short",     
-          year: "numeric",  
-        }).replace(/ /g, ', '),
+        new Date(grievance.date)
+          .toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          })
+          .replace(/ /g, ", "),
         "21,Oct,2024",
         grievance.applicationStatus,
       ]),
       styles: {
-        overflow: 'linebreak',
+        overflow: "linebreak",
       },
       headStyles: {
         fillColor: [4, 54, 71],
         textColor: [255, 255, 255],
-        halign: 'center',
-        valign: 'middle',
+        halign: "center",
+        valign: "middle",
         cellPadding: 1,
         fontSize: 9,
       },
       bodyStyles: {
         cellPadding: 1,
-        overflow: 'linebreak',
+        overflow: "linebreak",
         fontSize: 9,
       },
       margin: { top: 20 },
     });
 
-    doc.save('completed_grievances.pdf');
+    doc.save("completed_grievances.pdf");
   };
-
 
   useEffect(() => {
     fetchGrievances();
@@ -364,12 +388,15 @@ const CompletedGrievance = () => {
                           style={{ background: "#21CE9E", marginLeft: "0px" }}
                           onClick={copyToClipboard}
                         >
-                          {/* <ToastContainer /> */}
                           {showPopup && (
                             <div className="popup">
-                              <span className="popup-title">Copy to clipboard</span>
+                              <span className="popup-title">
+                                Copy to clipboard
+                              </span>
                               <hr className="popup-divider" />
-                              <p className="popup-subtitle">Copied {grievances.length} rows to clipboard</p>
+                              <p className="popup-subtitle">
+                                Copied {grievances.length} rows to clipboard
+                              </p>
                             </div>
                           )}
                           <span>Copy</span>
@@ -433,9 +460,9 @@ const CompletedGrievance = () => {
                                   right: "4px",
                                   top: "50%",
                                   transform: "translateY(-50%)",
-                                  fontSize: "1.3rem", // Slightly larger size
-                                  color: "#006CA5", // Blue color
-                                  fontWeight: "500", // Bold text
+                                  fontSize: "1.3rem",
+                                  color: "#006CA5",
+                                  fontWeight: "500",
                                   textDecoration: "none",
                                 }}
                                 title="Clear"
@@ -617,9 +644,13 @@ const CompletedGrievance = () => {
                         <tbody>
                           {displayedGrievances.length > 0 ? (
                             displayedGrievances.map((grievance, index) => (
-
                               <tr key={grievance.id} class="table-success">
-                                <td> {(index + 1 + offset).toString().padStart(2, '0')}</td>
+                                <td>
+                                  {" "}
+                                  {(index + 1 + offset)
+                                    .toString()
+                                    .padStart(2, "0")}
+                                </td>
                                 <td>{grievance.inwardNo}</td>
                                 <td className="fw-semibold">
                                   <div className="d-flex align-items-center gap-3">
@@ -669,14 +700,20 @@ const CompletedGrievance = () => {
                                     </div>
                                   </div>
                                 </td>
-                                <td>{new Date(grievance.date).toLocaleDateString("en-GB", {
-                                  day: "2-digit",     // To get the day as two digits (e.g., 24)
-                                  month: "short",     // To get the short form of the month (e.g., Aug)
-                                  year: "numeric",    // To get the year as a four-digit number (e.g., 2024)
-                                }).replace(/ /g, ', ')}</td>
+                                <td>
+                                  {new Date(grievance.date)
+                                    .toLocaleDateString("en-GB", {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    })
+                                    .replace(/ /g, ", ")}
+                                </td>
                                 <td> 21,Oct,2024</td>
                                 <td>
-                                  <span class="badge bg-success">{grievance.applicationStatus}</span>
+                                  <span class="badge bg-success">
+                                    {grievance.applicationStatus}
+                                  </span>
                                 </td>
                               </tr>
                             ))

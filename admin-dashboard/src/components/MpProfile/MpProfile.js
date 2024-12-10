@@ -33,7 +33,6 @@ const MpProfile = () => {
   const fetchDescriptionData = async () => {
     try {
       const response = await api.get("/mp-profile-desc");
-      console.log(response.data);
       setDescriptionData(response.data);
     } catch (error) {
       toast.error("Failed to fetch description data!");
@@ -201,9 +200,11 @@ const MpProfile = () => {
                     </table>
                   </div>
 
-                  <div className="row m-t-50">
+                  <hr className="m-t-30" />
+
+                  <div className="row m-t-30">
                     <div className="col-sm-4 col-3">
-                      <h4 className="page-title">Mp Profile Description</h4>
+                      <h4 className="page-title">MP Profile Description</h4>
                     </div>
                   </div>
                   <div className="table-responsive">
@@ -284,7 +285,7 @@ const MpProfile = () => {
                     ) : (
                       <>
                         <div className="form-group">
-                          <label htmlFor="coName">Name</label>
+                          <label htmlFor="name">Name</label>
                           <input
                             type="text"
                             className="form-control"
@@ -326,8 +327,7 @@ const MpProfile = () => {
                               src={imagePreview}
                               alt="Preview"
                               style={{
-                                width: "100px",
-                                height: "100px",
+                                width: "75px",
                                 marginTop: "10px",
                               }}
                             />

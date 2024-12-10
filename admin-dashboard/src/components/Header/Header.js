@@ -45,13 +45,11 @@ const Header = ({ onLogout, username }) => {
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
 
-
   const [activeDropdownItem, setActiveDropdownItem] = useState(null);
 
   const handleDropdownItemClick = (item) => {
     setActiveDropdownItem(item);
   };
-
 
   return (
     <>
@@ -85,8 +83,6 @@ const Header = ({ onLogout, username }) => {
             <i className="fa fa-bars"></i>
           </Link>
           <ul className="nav user-menu float-right">
-
-            {/* User Profile with Online Status */}
             <li className="nav-item dropdown d-none d-sm-block">
               <Link
                 to="#."
@@ -104,7 +100,6 @@ const Header = ({ onLogout, username }) => {
                     alt="Admin"
                   />
                   <span className="status online"></span>{" "}
-                  {/* Online status dot */}
                 </span>
                 <span className="mx-1">{username}</span>{" "}
                 <i className="fa fa-angle-down ml-1"></i>
@@ -112,25 +107,27 @@ const Header = ({ onLogout, username }) => {
               {isUserDropdownOpen && (
                 <div className="dropdown-menu show dropdown-keep-visible">
                   <Link
-                    className={`dropdown-item ${activeDropdownItem === "My Profile" ? "active" : ""}`}
+                    className={`dropdown-item ${
+                      activeDropdownItem === "My Profile" ? "active" : ""
+                    }`}
                     to="#."
                     onClick={() => handleDropdownItemClick("My Profile")}
                   >
                     My Profile
                   </Link>
                   <Link
-                    className={`dropdown-item ${activeDropdownItem === "Logout" ? "active" : ""}`}
+                    className={`dropdown-item ${
+                      activeDropdownItem === "Logout" ? "active" : ""
+                    }`}
                     to="#."
                     onClick={onLogout}
                   >
                     Logout
                   </Link>
-
                 </div>
               )}
             </li>
 
-            {/* Mobile user menu, only visible on small screens */}
             <div className="dropdown mobile-user-menu float-right d-block d-sm-none">
               <Link
                 to="#."
@@ -145,14 +142,18 @@ const Header = ({ onLogout, username }) => {
               {isUserDropdownOpen && (
                 <div className="dropdown-menu dropdown-menu-right show mx-2 dropdown-keep-visible">
                   <Link
-                    className={`dropdown-item ${activeDropdownItem === "My Profile" ? "active" : ""}`}
+                    className={`dropdown-item ${
+                      activeDropdownItem === "My Profile" ? "active" : ""
+                    }`}
                     to="#."
                     onClick={() => handleDropdownItemClick("My Profile")}
                   >
                     My Profile
                   </Link>
                   <Link
-                    className={`dropdown-item ${activeDropdownItem === "Logout" ? "active" : ""}`}
+                    className={`dropdown-item ${
+                      activeDropdownItem === "Logout" ? "active" : ""
+                    }`}
                     to="#."
                     onClick={() => {
                       handleDropdownItemClick("Logout");
@@ -161,17 +162,13 @@ const Header = ({ onLogout, username }) => {
                   >
                     Logout
                   </Link>
-
                 </div>
               )}
             </div>
           </ul>
         </div>
       </div>
-      <Sidebar
-        isOpen={isSidebarOpen}
-        closeSidebar={closeSidebar}
-      />
+      <Sidebar isOpen={isSidebarOpen} closeSidebar={closeSidebar} />
     </>
   );
 };

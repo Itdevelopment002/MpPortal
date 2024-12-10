@@ -11,9 +11,8 @@ const AddTaluka = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const[Error, setError]=useState({taluka_name:""});
+  const [Error, setError] = useState({ taluka_name: "" });
 
-  // Fetch Booths
   const fetchTalukas = async () => {
     try {
       const response = await api.get("/talukas");
@@ -23,88 +22,71 @@ const AddTaluka = () => {
     }
   };
 
-  console.log(talukas);
-
   useEffect(() => {
     fetchTalukas();
   }, []);
 
-//validation
+  const validateForm = () => {
+    const newError = { sender: "" };
+    let isValid = true;
 
-const validateForm=()=>{
-  const newError={sender:""};
-  let isValid=true;
+    if (!formData.taluka_name.trim()) {
+      newError.taluka_name = "*taluka name is required";
+      isValid = false;
+    }
 
-  if(!formData.taluka_name.trim()){
-    newError.taluka_name="*taluka name is required";
-    isValid=false;
-  }
+    setError(newError);
+    return isValid;
+  };
 
-  setError(newError);
-  return isValid;
-}
+  const handleFocus = (field) => {
+    setError((prevError) => ({ ...prevError, [field]: "" }));
+  };
 
-//handle Foucus
-
-const handleFocus=(field)=>{
-  setError((prevError)=>({...prevError,[field]:""}));
-}
-  
-
-
-
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if(name==="taluka_name"){
-      if(/^[A-Za-z\s]*$/.test(value)|| value === ""){
-    setFormData({ ...formData, [name]: value });
+    if (name === "taluka_name") {
+      if (/^[A-Za-z\s]*$/.test(value) || value === "") {
+        setFormData({ ...formData, [name]: value });
       }
     }
   };
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validateForm()){
+    if (!validateForm()) {
       return;
     }
     try {
       if (isEditing) {
-        await api.put(
-          `/talukas/${formData.id}`,
-          formData
-        );
+        await api.put(`/talukas/${formData.id}`, formData);
       } else {
         await api.post("/talukas", formData);
       }
       resetForm();
       fetchTalukas();
-      setShowEditModal(false); // Close modal after saving
+      setShowEditModal(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
-  // Handle Edit Button Click
   const handleEdit = (taluka) => {
-    setFormData(taluka); // Populate form with selected booth data
+    setFormData(taluka);
     setIsEditing(true);
-    setShowEditModal(true); // Open modal for editing
+    setShowEditModal(true);
   };
 
-  // Handle Delete
   const handleDelete = async () => {
     try {
       await api.delete(`/talukas/${deleteId}`);
       fetchTalukas();
-      setShowDeleteModal(false); // Close delete confirmation modal
+      setShowDeleteModal(false);
     } catch (error) {
       console.error("Error deleting taluka:", error);
     }
   };
 
-  // Reset form data
   const resetForm = () => {
     setFormData({ id: null, taluka_name: "" });
     setIsEditing(false);
@@ -114,7 +96,6 @@ const handleFocus=(field)=>{
     <>
       <div className="main-content app-content">
         <div className="container-fluid">
-          {/* Page Header */}
           <div className="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
             <div>
               <nav>
@@ -131,12 +112,10 @@ const handleFocus=(field)=>{
             </div>
           </div>
 
-          {/* Form and Table */}
           <div className="row">
             <div className="col-xl-12">
               <div className="card custom-card">
                 <div className="card-body">
-                  {/* Form */}
                   <form onSubmit={handleSubmit}>
                     <div className="row gy-3">
                       <div className="col-xl-4 col-md-4">
@@ -148,10 +127,13 @@ const handleFocus=(field)=>{
                           value={formData.taluka_name}
                           onChange={handleChange}
                           placeholder="Enter Taluka Name"
-                          onFocus={()=>handleFocus('taluka_name')}
+                          onFocus={() => handleFocus("taluka_name")}
                         />
-                        {Error.taluka_name && <p style={{ color: "red", fontSize: "11px" }}>{Error.taluka_name}</p>}
-
+                        {Error.taluka_name && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.taluka_name}
+                          </p>
+                        )}
                       </div>
                       <div className="mt-5 col-xl-4">
                         <button className="btn btn-purple-gradient">
@@ -169,7 +151,6 @@ const handleFocus=(field)=>{
                   </form>
                 </div>
 
-                {/* Booth List Table */}
                 <div className="card-body">
                   <div className="table-responsive">
                     <table className="table text-nowrap table-bordered border-primary">
@@ -188,7 +169,6 @@ const handleFocus=(field)=>{
                               <td>{taluka.taluka_name}</td>
                               <td>
                                 <div className="btn-list">
-                                  {/* Edit Button */}
                                   <button
                                     className="btn btn-sm btn-icon btn-success-gradient"
                                     onClick={() => handleEdit(taluka)}
@@ -196,7 +176,6 @@ const handleFocus=(field)=>{
                                     <i className="ri-pencil-line"></i>
                                   </button>
 
-                                  {/* Delete Button */}
                                   <button
                                     className="btn btn-sm btn-icon btn-danger-gradient"
                                     onClick={() => {
@@ -227,12 +206,10 @@ const handleFocus=(field)=>{
         </div>
       </div>
 
-      {/* Backdrop when Modals are shown */}
       {(showEditModal || showDeleteModal) && (
         <div className="modal-backdrop fade show"></div>
       )}
 
-      {/* Edit Modal */}
       {showEditModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">
@@ -287,7 +264,6 @@ const handleFocus=(field)=>{
         </div>
       )}
 
-      {/* Delete Modal */}
       {showDeleteModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">

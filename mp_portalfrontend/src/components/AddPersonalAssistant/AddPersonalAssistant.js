@@ -10,13 +10,11 @@ const Addpa = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [Error,setError]=useState({name:"",mobile:""});
+  const [Error, setError] = useState({ name: "", mobile: "" });
 
   const fetchAssistants = async () => {
     try {
-      const response = await api.get(
-        "/personal_assistants"
-      );
+      const response = await api.get("/personal_assistants");
       setAssistants(response.data);
     } catch (error) {
       console.error("Error fetching assistants:", error);
@@ -27,97 +25,80 @@ const Addpa = () => {
     fetchAssistants();
   }, []);
 
-
-  //handle change
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === "name") {
       if (/^[A-Za-z\s]*$/.test(value) || value === "") {
         setFormData({ ...formData, [name]: value });
       }
-    }
-
-    else if (name === "mobile") {
+    } else if (name === "mobile") {
       if (/^[0-9]*$/.test(value) || value === "") {
         setFormData({ ...formData, [name]: value });
       }
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validateForm()){
+    if (!validateForm()) {
       return;
     }
     try {
       if (isEditing) {
-        await api.put(
-          `/personal_assistants/${formData.id}`,
-          formData
-        );
+        await api.put(`/personal_assistants/${formData.id}`, formData);
       } else {
-        await api.post(
-          "/personal_assistants",
-          formData
-        );
+        await api.post("/personal_assistants", formData);
       }
       resetForm();
       fetchAssistants();
-      setShowEditModal(false); 
+      setShowEditModal(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
-//validations
+  const validateForm = () => {
+    const newError = { name: "", mobile: "" };
+    let isValid = true;
 
-const validateForm = () => {
-  const newError = { name: "", mobile: "" };
-  let isValid = true;
+    if (!formData.name.trim()) {
+      newError.name = "*Name is required.";
+      isValid = false;
+    }
 
-  if (!formData.name.trim()) {
-    newError.name = "*Name is required.";
-    isValid = false;
-  }
+    const mobilePattern = /^[0-9]{10}$/;
+    if (!formData.mobile) {
+      newError.mobile = "*Mobile number is required.";
+      isValid = false;
+    } else if (!mobilePattern.test(formData.mobile)) {
+      newError.mobile = "*Mobile number must be 10 digits.";
+      isValid = false;
+    }
 
-  const mobilePattern = /^[0-9]{10}$/;
-  if (!formData.mobile) {
-    newError.mobile = "*Mobile number is required.";
-    isValid = false;
-  } else if (!mobilePattern.test(formData.mobile)) {
-    newError.mobile = "*Mobile number must be 10 digits.";
-    isValid = false;
-  }
+    setError(newError);
+    return isValid;
+  };
 
-  setError(newError);
-  return isValid;
-};
-//handle focus
-const handleFocus = (field) => {
-  setError((prevError) => ({ ...prevError, [field]: "" }));
-};
+  const handleFocus = (field) => {
+    setError((prevError) => ({ ...prevError, [field]: "" }));
+  };
 
   const handleEdit = (assistant) => {
-    setFormData(assistant); 
+    setFormData(assistant);
     setIsEditing(true);
     setShowEditModal(true);
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(
-        `/personal_assistants/${deleteId}`
-      );
+      await api.delete(`/personal_assistants/${deleteId}`);
       fetchAssistants();
       setShowDeleteModal(false);
     } catch (error) {
       console.error("Error deleting assistant:", error);
     }
   };
-
- 
 
   const resetForm = () => {
     setFormData({ id: null, name: "", mobile: "" });
@@ -128,7 +109,6 @@ const handleFocus = (field) => {
     <>
       <div className="main-content app-content">
         <div className="container-fluid">
-          {/* Page Header */}
           <div className="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
             <div>
               <nav>
@@ -145,7 +125,6 @@ const handleFocus = (field) => {
             </div>
           </div>
 
-          {/* Form and Table */}
           <div className="row">
             <div className="col-xl-12">
               <div className="card custom-card">
@@ -164,10 +143,13 @@ const handleFocus = (field) => {
                           value={formData.name}
                           onChange={handleChange}
                           placeholder="Enter PA Name"
-                          onFocus={() => handleFocus('name')}
+                          onFocus={() => handleFocus("name")}
                         />
-                         {Error.name && <p style={{ color: "red", fontSize: "11px" }}>{Error.name}</p>}
-                    
+                        {Error.name && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.name}
+                          </p>
+                        )}
                       </div>
                       <div className="col-xl-4 col-md-4">
                         <label className="form-label">Mobile No.</label>
@@ -179,13 +161,8 @@ const handleFocus = (field) => {
                           value={formData.mobile}
                           onChange={handleChange}
                           placeholder="Enter Mobile No."
-                          onFocus={() => handleFocus('mobile')}
-                            // {Error.mobile && <p style={{ color: "red", fontSize: "11px" }}>{Error.mobile}</p>}
+                          onFocus={() => handleFocus("mobile")}
                         />
-                    
-                         
-
-
                       </div>
                       <div className="mt-5 col-xl-4">
                         <button className="btn btn-purple-gradient">
@@ -203,7 +180,6 @@ const handleFocus = (field) => {
                   </form>
                 </div>
 
-                {/* Assistant List Table */}
                 <div className="card-body">
                   <div className="table-responsive">
                     <table className="table text-nowrap table-bordered border-primary">
@@ -260,12 +236,10 @@ const handleFocus = (field) => {
         </div>
       </div>
 
-      
       {(showEditModal || showDeleteModal) && (
         <div className="modal-backdrop fade show"></div>
       )}
 
-     
       {showEditModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">
@@ -297,9 +271,7 @@ const handleFocus = (field) => {
                     />
                   </div>
                   <div className="col-xl-4 col-md-4">
-                    <label className="form-label">
-                      Mobile No.
-                    </label>
+                    <label className="form-label">Mobile No.</label>
                     <input
                       type="text"
                       className="form-control "
@@ -313,7 +285,7 @@ const handleFocus = (field) => {
                 </div>
               </div>
               <div className="modal-footer">
-              <button
+                <button
                   type="button"
                   className="btn btn-purple-gradient"
                   onClick={handleSubmit}
@@ -335,7 +307,7 @@ const handleFocus = (field) => {
           </div>
         </div>
       )}
-     
+
       {showDeleteModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">

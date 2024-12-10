@@ -56,10 +56,6 @@
   background-color: rgba(0, 0, 0, 0.3); 
 }
 
-/* .sidebar {
-  height: 100vh;
-} */
-
 .sidebar {
   position: fixed;
   left: -250px;
@@ -94,19 +90,17 @@
   
 
   .sidebar-overlay {
-    display: none; /* No overlay on large screens */
+    display: none; 
   }
 
-  /* Ensure the sidebar is closed by default on larger screens */
   .sidebar.opened {
     display: none;
   }
 }
 
-/* Small screens: Sidebar hidden by default */
 @media (max-width: 990px) {
   .sidebar-overlay {
-    display: block; /* Overlay visible on small screens */
+    display: block; 
   }
 }
 

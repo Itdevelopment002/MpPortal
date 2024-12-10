@@ -36,7 +36,9 @@ function App() {
   );
 
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState(localStorage.getItem("username") || "");
+  const [username, setUsername] = useState(
+    localStorage.getItem("username") || ""
+  );
 
   useEffect(() => {
     if (isAuthenticated) {

@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import api from "../../api";
 import "flatpickr/dist/flatpickr.css";
-import './AddNewGrievance.css'
+import "./AddNewGrievance.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-
-
 const AddNewGrievance = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [subjects, setSubjects] = useState([]);
   const [booths, setBooths] = useState([]);
   const [assistants, setAssistants] = useState([]);
@@ -39,7 +37,6 @@ const AddNewGrievance = () => {
     remark: "",
   });
 
-
   const [Error, setError] = useState({
     inwardNo: "",
     subject: "",
@@ -57,22 +54,39 @@ const AddNewGrievance = () => {
     pincode: "",
     whatsappGroup: "",
     remark: "",
-  })
-
+  });
 
   const validateForm = () => {
-    const newError = { inwardNo: "", subject: "", fullName: "", mobileNo: "", boothNo: "", handledBy: "", complaintSentTo: "", date: "", applicationStatus: "", district: "", taluka: "", village: "", city: "", pincode: "", whatsappGroup: "", remark: "", };
+    const newError = {
+      inwardNo: "",
+      subject: "",
+      fullName: "",
+      mobileNo: "",
+      boothNo: "",
+      handledBy: "",
+      complaintSentTo: "",
+      date: "",
+      applicationStatus: "",
+      district: "",
+      taluka: "",
+      village: "",
+      city: "",
+      pincode: "",
+      whatsappGroup: "",
+      remark: "",
+    };
     let isValid = true;
 
     if (!formData.inwardNo.trim()) {
       newError.inwardNo = "*Inward number is required";
       isValid = false;
-    }
-    else if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d/-]+$/.test(formData.inwardNo)) {
-      newError.inwardNo = "*Inward number must contain both letters and numbers, and can include '/' and '-'";
+    } else if (
+      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d/-]+$/.test(formData.inwardNo)
+    ) {
+      newError.inwardNo =
+        "*Inward number must contain both letters and numbers, and can include '/' and '-'";
       isValid = false;
     }
-
 
     if (!formData.subject) {
       newError.subject = "*Subject is required";
@@ -152,15 +166,11 @@ const AddNewGrievance = () => {
   };
   const handleFocus = (field) => {
     setError((prevError) => ({ ...prevError, [field]: "" }));
-  }
-
-
+  };
 
   const fetchSubjects = async () => {
     try {
-      const response = await api.get(
-        "/subjects"
-      );
+      const response = await api.get("/subjects");
       setSubjects(response.data);
     } catch (error) {
       console.error("Error fetching subjects:", error);
@@ -169,9 +179,7 @@ const AddNewGrievance = () => {
 
   const fetchBooths = async () => {
     try {
-      const response = await api.get(
-        "/booths"
-      );
+      const response = await api.get("/booths");
       setBooths(response.data);
     } catch (error) {
       console.error("Error fetching booths:", error);
@@ -180,9 +188,7 @@ const AddNewGrievance = () => {
 
   const fetchAssistants = async () => {
     try {
-      const response = await api.get(
-        "/personal_assistants"
-      );
+      const response = await api.get("/personal_assistants");
       setAssistants(response.data);
     } catch (error) {
       console.error("Error fetching assistants:", error);
@@ -191,9 +197,7 @@ const AddNewGrievance = () => {
 
   const fetchSenders = async () => {
     try {
-      const response = await api.get(
-        "/complaint_senders"
-      );
+      const response = await api.get("/complaint_senders");
       setSenders(response.data);
     } catch (error) {
       console.error("Error fetching senders:", error);
@@ -202,9 +206,7 @@ const AddNewGrievance = () => {
 
   const fetchStatus = async () => {
     try {
-      const response = await api.get(
-        "/application_status"
-      );
+      const response = await api.get("/application_status");
       setStatus(response.data);
     } catch (error) {
       console.error("Error fetching status:", error);
@@ -222,9 +224,7 @@ const AddNewGrievance = () => {
 
   const fetchGroups = async () => {
     try {
-      const response = await api.get(
-        "/whatsapp_groups"
-      );
+      const response = await api.get("/whatsapp_groups");
       setGroups(response.data);
     } catch (error) {
       console.error("Error fetching groups:", error);
@@ -241,27 +241,20 @@ const AddNewGrievance = () => {
     fetchGroups();
   }, []);
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let newError = {}; 
+    let newError = {};
 
     const alphaRegex = /^[A-Za-z\s]*$/;
 
-
-
-
     if (name === "inwardNo") {
-
       setFormData({ ...formData, [name]: value });
 
       if (value.trim() !== "") {
-        newError[name] = ""; 
+        newError[name] = "";
       } else {
         newError[name] = "*Inward number cannot be empty";
       }
-
-
     }
     if (name === "date") {
       const dateValue = new Date(value);
@@ -270,33 +263,39 @@ const AddNewGrievance = () => {
       }
     }
 
-    if (name === "fullName" || name === "subject" || name === "handledBy" ||
-      name === "complaintSentTo" || name === "district" ||
-      name === "taluka" || name === "village" || name === "city" || name === "whatsappGroup" || name === "applicationStatus" || name === "remark") {
-
+    if (
+      name === "fullName" ||
+      name === "subject" ||
+      name === "handledBy" ||
+      name === "complaintSentTo" ||
+      name === "district" ||
+      name === "taluka" ||
+      name === "village" ||
+      name === "city" ||
+      name === "whatsappGroup" ||
+      name === "applicationStatus" ||
+      name === "remark"
+    ) {
       if (alphaRegex.test(value) || value === "") {
         setFormData({ ...formData, [name]: value });
         newError[name] = "";
       } else {
         newError[name] = `*Only alphabets are allowed for ${name}`;
       }
-    }
-
-    else if (name === "mobileNo" || name === "pincode" || name === "boothNo") {
-
+    } else if (
+      name === "mobileNo" ||
+      name === "pincode" ||
+      name === "boothNo"
+    ) {
       if (/^[0-9]*$/.test(value) || value === "") {
         setFormData({ ...formData, [name]: value });
         newError[name] = "";
-
-      }
-      else {
+      } else {
         newError[name] = `*Only numbers are allowed for ${name}`;
       }
     }
     setError((prevError) => ({ ...prevError, ...newError }));
-
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -306,20 +305,20 @@ const AddNewGrievance = () => {
     }
 
     if (!formData.date) {
-      formData.date = new Date().toISOString().split('T')[0];
+      formData.date = new Date().toISOString().split("T")[0];
     }
 
     try {
-      const response = await api.post('/grievances', formData);
-      console.log('Grievance added successfully', response.data);
+      // eslint-disable-next-line
+      const response = await api.post("/grievances", formData);
       const notificationData = {
         heading: "Added New Entry",
-        description: `Added new grievance ${formData.inwardNo}`, 
+        description: `Added new grievance ${formData.inwardNo}`,
         readed: 0,
       };
-  
+
       await api.post("/notification", notificationData);
-      navigate("/all-grievance-list")
+      navigate("/all-grievance-list");
 
       setFormData({
         inwardNo: "",
@@ -329,7 +328,7 @@ const AddNewGrievance = () => {
         boothNo: "",
         handledBy: "",
         complaintSentTo: "",
-        date: '',
+        date: "",
         applicationStatus: "",
         district: "",
         taluka: "",
@@ -340,12 +339,10 @@ const AddNewGrievance = () => {
         remark: "",
       });
     } catch (error) {
-      console.error('Error adding grievances:', error);
-      alert('Error adding grievance, please try again.');
+      console.error("Error adding grievances:", error);
+      alert("Error adding grievance, please try again.");
     }
   };
-
-
 
   const resetForm = () => {
     setFormData({
@@ -368,7 +365,7 @@ const AddNewGrievance = () => {
     });
   };
   const [selectedDate, setSelectedDate] = useState(null);
-return (
+  return (
     <>
       <div class="main-content app-content">
         <div class="container-fluid">
@@ -393,9 +390,7 @@ return (
               <div class="card custom-card">
                 <div class="card-header justify-content-between">
                   <div class="card-title fs-5">New Application Data Entry</div>
-                  <div class="prism-toggle">
-                   
-                  </div>
+                  <div class="prism-toggle"></div>
                 </div>
                 <div class="card-body">
                   <form onSubmit={handleSubmit} autocomplete="off">
@@ -413,16 +408,16 @@ return (
                           value={formData.inwardNo}
                           onChange={handleChange}
                           placeholder="IN/0001/23-8-24"
-                          onFocus={() => handleFocus('inwardNo')}
+                          onFocus={() => handleFocus("inwardNo")}
                         />
-                        {Error.inwardNo && <p style={{ color: "red", fontSize: "11px" }}>{Error.inwardNo}</p>}
-
+                        {Error.inwardNo && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.inwardNo}
+                          </p>
+                        )}
                       </div>
                       <div className="col-xl-6 col-md-6">
-                        <label
-                          htmlFor="subject-select"
-                          className="form-label"
-                        >
+                        <label htmlFor="subject-select" className="form-label">
                           Subject <span className="text-danger">*</span>
                         </label>
                         <select
@@ -431,7 +426,7 @@ return (
                           name="subject"
                           value={formData.subject}
                           onChange={handleChange}
-                          onFocus={() => handleFocus('subject')}
+                          onFocus={() => handleFocus("subject")}
                         >
                           <option selected>Select Subject</option>
                           {subjects.map((subject, index) => (
@@ -440,8 +435,11 @@ return (
                             </option>
                           ))}
                         </select>
-                        {Error.subject && <p style={{ color: "red", fontSize: "11px" }}>{Error.subject}</p>}
-
+                        {Error.subject && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.subject}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-6 col-md-6">
                         <label for="input-rounded" class="form-label">
@@ -455,10 +453,13 @@ return (
                           value={formData.fullName}
                           onChange={handleChange}
                           placeholder="Enter Full Name"
-                          onFocus={() => handleFocus('fullName')}
+                          onFocus={() => handleFocus("fullName")}
                         />
-                        {Error.fullName && <p style={{ color: "red", fontSize: "11px" }}>{Error.fullName}</p>}
-
+                        {Error.fullName && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.fullName}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-6 col-md-6">
                         <label for="input-rounded" class="form-label">
@@ -473,16 +474,16 @@ return (
                           value={formData.mobileNo}
                           onChange={handleChange}
                           placeholder="Enter Mobile No."
-                          onFocus={() => handleFocus('mobileNo')}
+                          onFocus={() => handleFocus("mobileNo")}
                         />
-                        {Error.mobileNo && <p style={{ color: "red", fontSize: "11px" }}>{Error.mobileNo}</p>}
-
+                        {Error.mobileNo && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.mobileNo}
+                          </p>
+                        )}
                       </div>
                       <div className="col-xl-6 col-md-6">
-                        <label
-                          htmlFor="booth-select"
-                          className="form-label"
-                        >
+                        <label htmlFor="booth-select" className="form-label">
                           Booth No. <span className="text-danger">*</span>
                         </label>
                         <select
@@ -491,7 +492,7 @@ return (
                           name="boothNo"
                           value={formData.boothNo}
                           onChange={handleChange}
-                          onFocus={() => handleFocus('boothNo')}
+                          onFocus={() => handleFocus("boothNo")}
                         >
                           <option selected>Select Booth No.</option>
                           {booths.map((booth, index) => (
@@ -500,8 +501,11 @@ return (
                             </option>
                           ))}
                         </select>
-                        {Error.boothNo && <p style={{ color: "red", fontSize: "11px" }}>{Error.boothNo}</p>}
-
+                        {Error.boothNo && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.boothNo}
+                          </p>
+                        )}
                       </div>
                       <div className="col-xl-6 col-md-6">
                         <label
@@ -516,7 +520,7 @@ return (
                           name="handledBy"
                           value={formData.handledBy}
                           onChange={handleChange}
-                          onFocus={() => handleFocus('handledBy')}
+                          onFocus={() => handleFocus("handledBy")}
                         >
                           <option selected>Select Handler</option>
                           {assistants.map((assistant, index) => (
@@ -525,8 +529,11 @@ return (
                             </option>
                           ))}
                         </select>
-                        {Error.handledBy && <p style={{ color: "red", fontSize: "11px" }}>{Error.handledBy}</p>}
-
+                        {Error.handledBy && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.handledBy}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-4 col-md-6">
                         <label htmlFor="complaintSentTo" className="form-label">
@@ -538,7 +545,7 @@ return (
                           name="complaintSentTo"
                           value={formData.complaintSentTo}
                           onChange={handleChange}
-                          onFocus={() => handleFocus('complaintSentTo')}
+                          onFocus={() => handleFocus("complaintSentTo")}
                         >
                           <option selected>Select Sender</option>
                           {senders.map((sender, index) => (
@@ -547,12 +554,18 @@ return (
                             </option>
                           ))}
                         </select>
-                        {Error.complaintSentTo && <p style={{ color: "red", fontSize: "11px" }}>{Error.complaintSentTo}</p>}
-
+                        {Error.complaintSentTo && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.complaintSentTo}
+                          </p>
+                        )}
                       </div>
                       <div className="col-xl-4 col-md-4">
                         <div className="date-picker-wrapper">
-                          <label htmlFor="custom-datepicker" className="form-label">
+                          <label
+                            htmlFor="custom-datepicker"
+                            className="form-label"
+                          >
                             Date <span className="text-danger">*</span>
                           </label>
                           <DatePicker
@@ -566,9 +579,12 @@ return (
                             showYearDropdown
                             dropdownMode="select"
                           />
-                          
-                          {Error.date && <p style={{ color: "red", fontSize: "11px" }}>{Error.date}</p>}
 
+                          {Error.date && (
+                            <p style={{ color: "red", fontSize: "11px" }}>
+                              {Error.date}
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div class="col-xl-4 col-md-6">
@@ -581,7 +597,7 @@ return (
                           name="applicationStatus"
                           value={formData.applicationStatus}
                           onChange={handleChange}
-                          onFocus={() => handleFocus('applicationStatus')}
+                          onFocus={() => handleFocus("applicationStatus")}
                         >
                           <option selected>Select Status</option>
                           {status.map((status, index) => (
@@ -590,8 +606,11 @@ return (
                             </option>
                           ))}
                         </select>
-                        {Error.applicationStatus && <p style={{ color: "red", fontSize: "11px" }}>{Error.applicationStatus}</p>}
-
+                        {Error.applicationStatus && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.applicationStatus}
+                          </p>
+                        )}
                       </div>
 
                       <div class="col-xl-4 col-md-6">
@@ -606,10 +625,13 @@ return (
                           value={formData.district}
                           onChange={handleChange}
                           placeholder="Enter Disctrict"
-                          onFocus={() => handleFocus('district')}
+                          onFocus={() => handleFocus("district")}
                         />
-                        {Error.district && <p style={{ color: "red", fontSize: "11px" }}>{Error.district}</p>}
-
+                        {Error.district && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.district}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-4 col-md-6">
                         <label htmlFor="taluka" class="form-label">
@@ -621,7 +643,7 @@ return (
                           name="taluka"
                           value={formData.taluka}
                           onChange={handleChange}
-                          onFocus={() => handleFocus('taluka')}
+                          onFocus={() => handleFocus("taluka")}
                         >
                           <option selected>Select Taluka</option>
                           {talukas.map((taluka, index) => (
@@ -630,8 +652,11 @@ return (
                             </option>
                           ))}
                         </select>
-                        {Error.taluka && <p style={{ color: "red", fontSize: "11px" }}>{Error.taluka}</p>}
-
+                        {Error.taluka && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.taluka}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-4 col-md-6">
                         <label for="input-rounded" class="form-label">
@@ -645,10 +670,13 @@ return (
                           value={formData.village}
                           onChange={handleChange}
                           placeholder="Enter Village"
-                          onFocus={() => handleFocus('village')}
+                          onFocus={() => handleFocus("village")}
                         />
-                        {Error.village && <p style={{ color: "red", fontSize: "11px" }}>{Error.village}</p>}
-
+                        {Error.village && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.village}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-2 col-md-6">
                         <label for="input-rounded" class="form-label">
@@ -662,10 +690,13 @@ return (
                           value={formData.city}
                           onChange={handleChange}
                           placeholder="Enter city"
-                          onFocus={() => handleFocus('city')}
+                          onFocus={() => handleFocus("city")}
                         />
-                        {Error.city && <p style={{ color: "red", fontSize: "11px" }}>{Error.city}</p>}
-
+                        {Error.city && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.city}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-2 col-md-6">
                         <label for="input-rounded" class="form-label">
@@ -680,10 +711,13 @@ return (
                           value={formData.pincode}
                           onChange={handleChange}
                           placeholder="Enter Pincode"
-                          onFocus={() => handleFocus('pincode')}
+                          onFocus={() => handleFocus("pincode")}
                         />
-                        {Error.pincode && <p style={{ color: "red", fontSize: "11px" }}>{Error.pincode}</p>}
-
+                        {Error.pincode && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.pincode}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-2 col-md-6">
                         <label htmlFor="whatsappGroup" class="form-label">
@@ -695,7 +729,7 @@ return (
                           name="whatsappGroup"
                           value={formData.whatsappGroup}
                           onChange={handleChange}
-                          onFocus={() => handleFocus('whatsappGroup')}
+                          onFocus={() => handleFocus("whatsappGroup")}
                         >
                           <option selected>Select Whatsapp Group</option>
                           {groups.map((group, index) => (
@@ -704,8 +738,11 @@ return (
                             </option>
                           ))}
                         </select>
-                        {Error.whatsappGroup && <p style={{ color: "red", fontSize: "11px" }}>{Error.whatsappGroup}</p>}
-
+                        {Error.whatsappGroup && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.whatsappGroup}
+                          </p>
+                        )}
                       </div>
                       <div class="col-xl-6">
                         <label for="input-rounded" class="form-label">
@@ -719,15 +756,29 @@ return (
                           value={formData.remark}
                           onChange={handleChange}
                           placeholder="Enter Remark"
-                          onFocus={() => handleFocus('remark')}
+                          onFocus={() => handleFocus("remark")}
                         />
-                        {Error.remark && <p style={{ color: "red", fontSize: "11px" }}>{Error.remark}</p>}
-
+                        {Error.remark && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.remark}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="mt-3">
-                      <button to="#submit" className="btn btn-purple-gradient btn-wave waves-effect waves-light">Submit</button>
-                      <button to="#cancel" className="btn btn-danger-gradient btn-wave waves-effect waves-light mx-1" onClick={resetForm}>Cancel</button>
+                      <button
+                        to="#submit"
+                        className="btn btn-purple-gradient btn-wave waves-effect waves-light"
+                      >
+                        Submit
+                      </button>
+                      <button
+                        to="#cancel"
+                        className="btn btn-danger-gradient btn-wave waves-effect waves-light mx-1"
+                        onClick={resetForm}
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -741,4 +792,3 @@ return (
 };
 
 export default AddNewGrievance;
-
