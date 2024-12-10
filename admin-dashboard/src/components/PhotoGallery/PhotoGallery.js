@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import api, { baseURL } from "../api";
+import api, { baseURLImage } from "../api";
 import { Link } from "react-router-dom";
 import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
@@ -156,13 +156,13 @@ const PhotoGallery = () => {
                             <td>{gallery.photo_name}</td>
                             <td>
                               <Link
-                                to={`http://localhost:5000${gallery.file_path}`}
+                                to={`${baseURLImage}${gallery.file_path}`}
                                 className="glightbox"
                                 data-gallery="gallery-images"
                               >
                                 <img
                                   width="100px"
-                                  src={`http://localhost:5000${gallery.file_path}`}
+                                  src={`${baseURLImage}${gallery.file_path}`}
                                   alt={`gallery${index + 1}`}
                                 />
                               </Link>

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import api from "../../api";
+import api, { baseURLImage } from "../../api";
 import {
   RiUserLine,
   RiEyeOffLine,
@@ -10,8 +10,6 @@ import {
   RiLockLine,
 } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
-import Praniti from "../../assets/images/login/congress-logo.png";
-import Photo2 from "../../assets/images/login/praniti-photo2.png";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,6 +25,7 @@ const Login = () => {
     username: "form-control",
     password: "form-control",
   });
+  // eslint-disable-next-line
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState([]);
   const [form, setForm] = useState([]);
@@ -135,7 +134,7 @@ const Login = () => {
                     <button className="btn btn-lg btn-light-ghost d-flex align-items-center justify-content-center flex-fill">
                       <img
                         width="150"
-                        src={`http://localhost:5000${form[0]?.image_path}`}
+                        src={`${baseURLImage}${form[0]?.image_path}`}
                         alt="congress-logo"
                       />
                     </button>
@@ -237,7 +236,7 @@ const Login = () => {
               <div className="login-rightside">
                 <img
                   className="mb-4"
-                  src={`http://localhost:5000${profile[0]?.image_path}`}
+                  src={`${baseURLImage}${profile[0]?.image_path}`}
                   alt="praniti-photo"
                 />
                 <h3 className="text-fixed-white mb-3 fw-medium">

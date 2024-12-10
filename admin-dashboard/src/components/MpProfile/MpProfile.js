@@ -4,7 +4,7 @@ import GLightbox from "glightbox";
 import "glightbox/dist/css/glightbox.min.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import api, { baseURL } from "../api";
+import api, { baseURLImage } from "../api";
 
 const MpProfile = () => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -40,7 +40,7 @@ const MpProfile = () => {
 
   const handleEditModalOpen = (mpprofile) => {
     setEditData(mpprofile);
-    setImagePreview(`${baseURL}${mpprofile.image_path}`);
+    setImagePreview(`${baseURLImage}${mpprofile.image_path}`);
     setShowEditModal(true);
   };
 
@@ -125,13 +125,13 @@ const MpProfile = () => {
                             <td className="mpprofile-items">{profile.info}</td>
                             <td>
                               <Link
-                                to={`http://localhost:5000${profile.image_path}`}
+                                to={`${baseURLImage}${profile.image_path}`}
                                 className="glightbox"
                                 data-gallery="slider-images"
                               >
                                 <img
                                   width="50px"
-                                  src={`http://localhost:5000${profile.image_path}`}
+                                  src={`${baseURLImage}${profile.image_path}`}
                                   alt={`profile-img${profile.image_path}`}
                                 />
                               </Link>

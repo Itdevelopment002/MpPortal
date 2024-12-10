@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import favicon from "../../assets/images/header/favicon.png";
 import emblemDark from "../../assets/images/landing/emblem-dark.png";
 import swachhBharatLogo from "../../assets/images/header/Swachh_Bharat_Mission_Logo.svg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Heading.css";
-import api from "../../api";
+import api, {baseURLImage} from "../../api";
 
 const Header = () => {
   const [header, setHeader] = useState([]);
@@ -30,7 +29,7 @@ const Header = () => {
         {/* Left Section: Logo and Text */}
         <div className="d-flex align-items-center flex-shrink-1 logo-left">
           <img
-            src={`http://localhost:5000${header[0]?.websitelogo}`}
+            src={`${baseURLImage}${header[0]?.websitelogo}`}
             alt="favicon-logo"
             className="me-3 logosize"
           />
