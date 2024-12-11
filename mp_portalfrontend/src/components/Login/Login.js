@@ -23,7 +23,6 @@ const Login = () => {
     username: "form-control",
     password: "form-control",
   });
-  // eslint-disable-next-line
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState([]);
   const [form, setForm] = useState([]);
@@ -78,8 +77,7 @@ const Login = () => {
     return newErrors;
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -104,8 +102,13 @@ const Login = () => {
         navigate("/dashboard");
       });
     } catch (err) {
-      alert(err.response.data.msg);
+      alert(err.response?.data?.msg || "An error occurred during login");
     }
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    handleLogin();
   };
 
   useEffect(() => {
@@ -143,85 +146,90 @@ const Login = () => {
                   <p className="mb-4 text-dark op-9 fw-normal text-center">
                     Please enter your details to Sign In
                   </p>
-                  <div className="row gy-3">
-                    <div className="col-xl-12 mb-2">
-                      <div className="mb-3">
-                        <label className="form-label fs-14 text-dark">
-                          Username
-                        </label>
-                        <div className="input-group">
-                          <div className="input-group-text">
-                            <RiUserLine />
+                  <form onSubmit={onSubmit}>
+                    <div className="row gy-3">
+                      <div className="col-xl-12 mb-2">
+                        <div className="mb-3">
+                          <label className="form-label fs-14 text-dark">
+                            Username
+                          </label>
+                          <div className="input-group">
+                            <div className="input-group-text">
+                              <RiUserLine />
+                            </div>
+                            <input
+                              type="text"
+                              className={inputStyles.username}
+                              name="username"
+                              value={userData.username}
+                              onChange={handleChange}
+                            />
                           </div>
-                          <input
-                            type="text"
-                            className={inputStyles.username}
-                            name="username"
-                            value={userData.username}
-                            onChange={handleChange}
-                          />
+                          {errors.username && (
+                            <div className="text-danger">{errors.username}</div>
+                          )}
                         </div>
-                        {errors.username && (
-                          <div className="text-danger">{errors.username}</div>
-                        )}
-                      </div>
 
-                      <div className="mb-3">
-                        <label className="form-label fs-14 text-dark">
-                          Password
-                        </label>
-                        <div className="input-group">
-                          <div className="input-group-text">
-                            <RiLockLine />
+                        <div className="mb-3">
+                          <label className="form-label fs-14 text-dark">
+                            Password
+                          </label>
+                          <div className="input-group">
+                            <div className="input-group-text">
+                              <RiLockLine />
+                            </div>
+                            <input
+                              type={showPassword ? "text" : "password"}
+                              className={inputStyles.password}
+                              name="password"
+                              value={userData.password}
+                              onChange={handleChange}
+                            />
+                            <a
+                              className="show-password-button text-muted"
+                              href="#."
+                              onClick={(e) => {
+                                e.preventDefault();
+                                togglePasswordVisibility();
+                              }}
+                            >
+                              {showPassword ? (
+                                <RiEyeLine className="align-middle" />
+                              ) : (
+                                <RiEyeOffLine className="align-middle" />
+                              )}
+                            </a>
                           </div>
+                          {errors.password && (
+                            <div className="text-danger">{errors.password}</div>
+                          )}
+                        </div>
+
+                        <div className="form-check mb-3">
                           <input
-                            type={showPassword ? "text" : "password"}
-                            className={inputStyles.password}
-                            name="password"
-                            value={userData.password}
-                            onChange={handleChange}
+                            className="form-check-input"
+                            type="checkbox"
+                            id="rememberCheck"
                           />
-                          <a
-                            className="show-password-button text-muted"
-                            href="#."
-                            onClick={togglePasswordVisibility}
+                          <label
+                            className="form-check-label"
+                            htmlFor="rememberCheck"
                           >
-                            {showPassword ? (
-                              <RiEyeLine className="align-middle" />
-                            ) : (
-                              <RiEyeOffLine className="align-middle" />
-                            )}
-                          </a>
+                            Remember password ?
+                          </label>
                         </div>
-                        {errors.password && (
-                          <div className="text-danger">{errors.password}</div>
-                        )}
-                      </div>
 
-                      <div className="form-check mb-3">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          id="rememberCheck"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="rememberCheck"
-                        >
-                          Remember password ?
-                        </label>
-                      </div>
-
-                      <div className="d-grid gap-2 col-6 mx-auto">
-                        <button
-                          className="btn btn-primary01-gradient text-center"
-                          onClick={onSubmit}
-                        >
-                          LOGIN
-                        </button>
+                        <div className="d-grid gap-2 col-6 mx-auto">
+                          <button
+                            type="submit"
+                            className="btn btn-primary01-gradient text-center"
+                          >
+                            LOGIN
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
