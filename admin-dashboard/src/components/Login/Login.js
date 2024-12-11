@@ -60,8 +60,35 @@ const Login = ({ onLogin }) => {
 
         <div className="col-md-6 d-flex align-items-center justify-content-center right-side">
           <div className="form-container form-container1">
-            <img src={img} alt="Logo" className="mb-4" />
-
+            {/* <img src={img} alt="Logo" className="mb-4" /> */}
+            <h4
+              className="text-center fw-medium mb-3"
+              style={{
+                fontFamily: "'Poppins', sans-serif", // Modern, clean font
+                fontSize: "1.3rem",
+                fontWeight: "600",
+                color: "#2c3e50", // Dark slate for a professional look
+                // textTransform: "uppercase",
+                letterSpacing: "1.5px",
+                marginBottom: "20px",
+                marginTop:'10px',
+              }}
+            >
+              Welcome to Citizen Grievance Management System
+            </h4>
+            <p
+              className="text-center"
+              style={{
+                fontFamily: "'Roboto Slab', serif", // Bold and elegant for titles
+                fontSize: "1.8rem",
+                fontWeight: "700",
+                color: "#e74c3c", // Bright red for emphasis
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)", // Subtle shadow for depth
+                marginBottom: "15px",
+              }}
+            >
+              LOGIN
+            </p>
             <form onSubmit={onSubmit}>
               <div className="mb-3 text-start">
                 <label className="mb-2 label1">Username</label>
@@ -95,7 +122,7 @@ const Login = ({ onLogin }) => {
                   Forget your Password?
                 </Link>
               </div>
-              <div className="button-container">
+              <div className="button-container mb-2">
                 <button type="submit" className="btn btn-primary btn1">
                   Login
                 </button>
