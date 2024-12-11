@@ -36,7 +36,6 @@ const LoginForm = () => {
     fetchLoginForm();
   }, []);
 
-
   const handleEditModalOpen = (form) => {
     setEditData(form);
     setImagePreview(`${baseURLImage}${form.image_path}`);

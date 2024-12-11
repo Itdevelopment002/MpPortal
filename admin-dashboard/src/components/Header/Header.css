@@ -1,8 +1,7 @@
-/* General Header Styling */
 .header {
-  background-color: #2C3E50 !important; /* Dark blue-gray background */
-  color: #ECF0F1 !important; /* Light gray text color */
-  border-bottom: 3px solid #1A252F !important; /* Darker accent border */
+  background-color: #2C3E50 !important; 
+  color: #ECF0F1 !important; 
+  border-bottom: 3px solid #1A252F !important; 
 }
 
 .header .logo {
@@ -18,7 +17,6 @@
   font-size: 18px !important;
 }
 
-/* User Menu Styling */
 .user-menu {
   list-style: none !important;
   margin: 0 !important;
@@ -42,7 +40,7 @@
   position: absolute !important;
   bottom: 0 !important;
   right: 0 !important;
-  background: #2ECC71 !important; /* Bright green for online */
+  background: #2ECC71 !important; 
   width: 10px !important;
   height: 10px !important;
   border-radius: 50% !important;
@@ -50,8 +48,8 @@
 }
 
 .user-menu .dropdown-menu {
-  background-color: #34495E !important; /* Dark blue background */
-  border: 1px solid #2C3E50 !important; /* Border matching header */
+  background-color: #34495E !important; 
+  border: 1px solid #2C3E50 !important; 
   border-radius: 5px !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
   min-width: 180px !important;
@@ -59,7 +57,7 @@
 }
 
 .user-menu .dropdown-menu a {
-  color: #ECF0F1 !important; /* Light gray link color */
+  color: #ECF0F1 !important;
   padding: 10px 15px !important;
   display: block !important;
   text-decoration: none !important;
@@ -72,14 +70,12 @@
 }
 
 .user-menu .dropdown-menu a.active {
-  background-color: #1A252F !important; /* Dark hover */
-  color: #1ABC9C !important; /* Teal hover text */
+  background-color: #1A252F !important; 
+  color: #1ABC9C !important; 
   border-radius: 7px !important;
 
 }
 
-
-/* Mobile User Menu */
 .mobile-user-menu .dropdown-menu {
   right: 10px !important;
   left: auto !important;
@@ -96,17 +92,15 @@
 }
 
 #mobile_btn:hover {
-  color: #1ABC9C !important; /* Teal hover */
+  color: #1ABC9C !important; 
 }
 
-/* Dropdown Menu Alignment */
 .dropdown-menu.dropdown-keep-visible {
   right: 5px !important;
   left: auto !important;
   position: absolute !important;
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 990px) {
   .user-menu {
       flex-direction: column !important;
@@ -123,12 +117,3 @@
     right: 0px !important;
   }
 }
-
-/* a {
-  color: inherit !important;
-  text-decoration: none !important;
-}
-
-a:hover {
-  color: #1ABC9C !important;
-} */

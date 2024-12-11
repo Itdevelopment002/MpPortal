@@ -28,8 +28,6 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
       {isOpen && (
         <div className="sidebar-overlay opened" onClick={closeSidebar} />
       )}
-
-      {/* Sidebar component */}
       <div className={`sidebar  ${isOpen ? "opened" : ""}`}>
         <div className="sidebar-inner">
           <div id="sidebar-menu" className="sidebar-menu">
@@ -39,8 +37,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                 onClick={() => handleItemClick("/")}
               >
                 <Link to="/home">
-                  <i className="fa fa-dashboard"></i>{" "}
-                  Header
+                  <i className="fa fa-dashboard"></i> Header
                 </Link>
               </li>
               <li
@@ -62,7 +59,7 @@ const Sidebar = ({ isOpen, closeSidebar, userDepartment }) => {
                   <i className="fa">
                     <RiAccountCircleLine />
                   </i>{" "}
-                  Mp Profile
+                  MP Profile
                 </Link>
               </li>
               <li className="submenu">

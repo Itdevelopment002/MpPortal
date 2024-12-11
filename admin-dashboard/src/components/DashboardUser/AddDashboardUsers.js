@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import api from "../api";
 import { useNavigate, Link } from "react-router-dom";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; 
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 const AddDashboardUsers = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +9,7 @@ const AddDashboardUsers = () => {
     password: "",
     confirmPassword: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
@@ -72,7 +73,7 @@ const AddDashboardUsers = () => {
               <Link to="/home">Home</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
-              <Link to="/user">Dashboard User</Link>
+              <Link to="/dashboard-user">Dashboard User</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Add Dashboard User
@@ -183,7 +184,9 @@ const AddDashboardUsers = () => {
                       value="Submit"
                     />
                     {success && (
-                      <p className="text-success">Dashboard User added successfully!</p>
+                      <p className="text-success">
+                        Dashboard User added successfully!
+                      </p>
                     )}
                     {errors.api && <p className="text-danger">{errors.api}</p>}
                   </form>

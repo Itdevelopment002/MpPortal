@@ -1,4 +1,4 @@
- import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ const AddBoothNo = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [Error,setError]=useState({booth_no:""});
+  const [Error, setError] = useState({ booth_no: "" });
 
   const fetchBooths = async () => {
     try {
@@ -22,34 +22,26 @@ const AddBoothNo = () => {
     }
   };
 
-  console.log(booths);
-
   useEffect(() => {
     fetchBooths();
   }, []);
 
+  const validateForm = () => {
+    const newError = { booth_no: "" };
+    let isValid = true;
 
-//validations
+    if (!formData.booth_no.trim()) {
+      newError.booth_no = "*Booth Number is required.";
+      isValid = false;
+    }
 
-const validateForm = () => {
-  const newError = { booth_no:"" };
-  let isValid = true;
+    setError(newError);
+    return isValid;
+  };
 
-  if (!formData.booth_no.trim()) {
-    newError.booth_no = "*Booth Number is required.";
-    isValid = false;
-  }
-
-
-  setError(newError);
-  return isValid;
-};
-
-//handle focus
-const handleFocus = (field) => {
-  setError((prevError) => ({ ...prevError, [field]: "" }));
-};
-
+  const handleFocus = (field) => {
+    setError((prevError) => ({ ...prevError, [field]: "" }));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,42 +50,38 @@ const handleFocus = (field) => {
         setFormData({ ...formData, [name]: value });
       }
     }
-    
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validateForm()){
+    if (!validateForm()) {
       return;
     }
     try {
       if (isEditing) {
-        await api.put(
-          `/booths/${formData.id}`,
-          formData
-        );
+        await api.put(`/booths/${formData.id}`, formData);
       } else {
         await api.post("/booths", formData);
       }
       resetForm();
       fetchBooths();
-      setShowEditModal(false); 
+      setShowEditModal(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
   const handleEdit = (booth) => {
-    setFormData(booth); 
+    setFormData(booth);
     setIsEditing(true);
-    setShowEditModal(true); 
+    setShowEditModal(true);
   };
 
   const handleDelete = async () => {
     try {
       await api.delete(`/booths/${deleteId}`);
       fetchBooths();
-      setShowDeleteModal(false); 
+      setShowDeleteModal(false);
     } catch (error) {
       console.error("Error deleting booth:", error);
     }
@@ -108,7 +96,6 @@ const handleFocus = (field) => {
     <>
       <div className="main-content app-content">
         <div className="container-fluid">
-          {/* Page Header */}
           <div className="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
             <div>
               <nav>
@@ -125,12 +112,10 @@ const handleFocus = (field) => {
             </div>
           </div>
 
-          {/* Form and Table */}
           <div className="row">
             <div className="col-xl-12">
               <div className="card custom-card">
                 <div className="card-body">
-                  {/* Form */}
                   <form onSubmit={handleSubmit}>
                     <div className="row gy-3">
                       <div className="col-xl-4 col-md-4">
@@ -143,9 +128,13 @@ const handleFocus = (field) => {
                           value={formData.booth_no}
                           onChange={handleChange}
                           placeholder="Enter Booth No."
-                          onFocus={() => handleFocus('booth_no')}
+                          onFocus={() => handleFocus("booth_no")}
                         />
-                        {Error.booth_no && <p style={{ color: "red", fontSize: "11px" }}>{Error.booth_no}</p>}
+                        {Error.booth_no && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.booth_no}
+                          </p>
+                        )}
                       </div>
                       <div className="mt-5 col-xl-4">
                         <button className="btn btn-purple-gradient">
@@ -163,7 +152,6 @@ const handleFocus = (field) => {
                   </form>
                 </div>
 
-                {/* Booth List Table */}
                 <div className="card-body">
                   <div className="table-responsive">
                     <table className="table text-nowrap table-bordered border-primary">
@@ -277,7 +265,6 @@ const handleFocus = (field) => {
         </div>
       )}
 
-      {/* Delete Modal */}
       {showDeleteModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">

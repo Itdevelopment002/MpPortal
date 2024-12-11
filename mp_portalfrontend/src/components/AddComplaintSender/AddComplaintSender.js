@@ -4,21 +4,18 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import api from "../../api";
 
-
 const AddComplaintSender = () => {
   const [complaints, setComplaints] = useState([]);
   const [formData, setFormData] = useState({ id: null, sender: "" });
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false); 
+  const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const[Error, setError]=useState({sender:""});
+  const [Error, setError] = useState({ sender: "" });
 
   const fetchComplaints = async () => {
     try {
-      const response = await api.get(
-        "/complaint_senders"
-      );
+      const response = await api.get("/complaint_senders");
       setComplaints(response.data);
     } catch (error) {
       console.error("Error fetching complaints:", error);
@@ -29,71 +26,59 @@ const AddComplaintSender = () => {
     fetchComplaints();
   }, []);
 
-//validation
+  const validateForm = () => {
+    const newError = { sender: "" };
+    let isValid = true;
 
-const validateForm=()=>{
-  const newError={sender:""};
-  let isValid=true;
+    if (!formData.sender.trim()) {
+      newError.sender = "*Sender name is required";
+      isValid = false;
+    }
 
-  if(!formData.sender.trim()){
-    newError.sender="*Sender name is required";
-    isValid=false;
-  }
+    setError(newError);
+    return isValid;
+  };
 
-  setError(newError);
-  return isValid;
-}
-
-//handle Foucus
-
-const handleFocus=(field)=>{
-  setError((prevError)=>({...prevError,[field]:""}));
-}
+  const handleFocus = (field) => {
+    setError((prevError) => ({ ...prevError, [field]: "" }));
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if(name==="sender"){
-      if(/^[A-Za-z\s]*$/.test(value)|| value === ""){
+    if (name === "sender") {
+      if (/^[A-Za-z\s]*$/.test(value) || value === "") {
         setFormData({ ...formData, [name]: value });
-     }
-   }
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validateForm()){
+    if (!validateForm()) {
       return;
     }
     try {
       if (isEditing) {
-        await api.put(
-          `/complaint_senders/${formData.id}`,
-          formData
-        );
+        await api.put(`/complaint_senders/${formData.id}`, formData);
       } else {
-        await api.post(
-          "/complaint_senders",
-          formData
-        );
+        await api.post("/complaint_senders", formData);
       }
       resetForm();
       fetchComplaints();
-      setShowEditModal(false); 
+      setShowEditModal(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
   const handleEdit = (complaint) => {
-    setFormData(complaint); 
+    setFormData(complaint);
     setIsEditing(true);
     setShowEditModal(true);
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(
-        `/complaint_senders/${deleteId}`
-      );
+      await api.delete(`/complaint_senders/${deleteId}`);
       fetchComplaints();
       setShowDeleteModal(false);
     } catch (error) {
@@ -123,7 +108,6 @@ const handleFocus=(field)=>{
                   </li>
                 </ol>
               </nav>
-              {/* <!-- <h1 class="page-title fw-medium fs-18 mb-0">Add New Entry</h1> --> */}
             </div>
           </div>
 
@@ -142,10 +126,13 @@ const handleFocus=(field)=>{
                           name="sender"
                           value={formData.sender}
                           onChange={handleChange}
-                          onFocus={()=>handleFocus('sender')}
+                          onFocus={() => handleFocus("sender")}
                         />
-                        {Error.sender && <p style={{ color: "red", fontSize: "11px" }}>{Error.sender}</p>}
-
+                        {Error.sender && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.sender}
+                          </p>
+                        )}
                       </div>
                       <div className="mt-5 col-xl-4">
                         <button className="btn btn-purple-gradient">
@@ -174,7 +161,7 @@ const handleFocus=(field)=>{
                       </thead>
                       <tbody>
                         {complaints.length > 0 ? (
-                            complaints.map((complaint, index) => (
+                          complaints.map((complaint, index) => (
                             <tr key={complaint.id} className="table-light">
                               <td>{index + 1}</td>
                               <td>{complaint.sender}</td>
@@ -216,7 +203,6 @@ const handleFocus=(field)=>{
         </div>
       </div>
 
-
       {(showEditModal || showDeleteModal) && (
         <div className="modal-backdrop fade show"></div>
       )}
@@ -226,10 +212,8 @@ const handleFocus=(field)=>{
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h6 className="modal-title">
-                Edit Complaint Sender
-              </h6>
-              <button
+                <h6 className="modal-title">Edit Complaint Sender</h6>
+                <button
                   type="button"
                   className="btn-close"
                   onClick={() => {
@@ -238,12 +222,10 @@ const handleFocus=(field)=>{
                   }}
                 ></button>
               </div>
-            <div className="modal-body">
+              <div className="modal-body">
                 <div className="row gy-3">
                   <div className="col-xl-8 col-md-8">
-                    <label className="form-label">
-                      Complaint Sender
-                    </label>
+                    <label className="form-label">Complaint Sender</label>
                     <input
                       type="text"
                       className="form-control"
@@ -253,10 +235,10 @@ const handleFocus=(field)=>{
                       placeholder="Enter Sender Name"
                     />
                   </div>
+                </div>
               </div>
-            </div>
-            <div className="modal-footer">
-              <button
+              <div className="modal-footer">
+                <button
                   type="button"
                   className="btn btn-purple-gradient"
                   onClick={handleSubmit}
@@ -274,10 +256,10 @@ const handleFocus=(field)=>{
                   Close
                 </button>
               </div>
+            </div>
           </div>
         </div>
-      </div>
-        )}
+      )}
 
       {showDeleteModal && (
         <div className="modal show d-block">

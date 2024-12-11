@@ -79,7 +79,8 @@ router.put("/mp-profile/:id", upload.single("image"), (req, res) => {
     updateParams.push(name);
   }
   if (designation) {
-    updateSql += updateParams.length > 0 ? ", designation = ?" : " designation = ?";
+    updateSql +=
+      updateParams.length > 0 ? ", designation = ?" : " designation = ?";
     updateParams.push(designation);
   }
 

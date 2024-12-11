@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import api from '../../api'; 
-
+import api from "../../api";
 
 const AddApplicationStatus = () => {
   const [statuses, setStatuses] = useState([]);
@@ -12,13 +11,11 @@ const AddApplicationStatus = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const[Error, setError]=useState({status:""});
+  const [Error, setError] = useState({ status: "" });
 
   const fetchStatus = async () => {
     try {
-      const response = await api.get(
-        "/application_status"
-      );
+      const response = await api.get("/application_status");
       setStatuses(response.data);
     } catch (error) {
       console.error("Error fetching status:", error);
@@ -29,73 +26,59 @@ const AddApplicationStatus = () => {
     fetchStatus();
   }, []);
 
-//validation
+  const validateForm = () => {
+    const newError = { status: "" };
+    let isValid = true;
 
-const validateForm=()=>{
-  const newError={status:""};
-  let isValid=true;
+    if (!formData.status.trim()) {
+      newError.status = "*status name is required";
+      isValid = false;
+    }
 
-  if(!formData.status.trim()){
-    newError.status="*status name is required";
-    isValid=false;
-  }
-
-  setError(newError);
-  return isValid;
-}
-
-//handle Foucus
-
-const handleFocus=(field)=>{
-  setError((prevError)=>({...prevError,[field]:""}));
-}
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if(name==="status"){
-      if(/^[A-Za-z\s]*$/.test(value)|| value === ""){
-        setFormData({ ...formData, [name]: value });
-     }
-   }
+    setError(newError);
+    return isValid;
   };
 
-  
+  const handleFocus = (field) => {
+    setError((prevError) => ({ ...prevError, [field]: "" }));
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "status") {
+      if (/^[A-Za-z\s]*$/.test(value) || value === "") {
+        setFormData({ ...formData, [name]: value });
+      }
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(!validateForm()){
+    if (!validateForm()) {
       return;
     }
     try {
       if (isEditing) {
-        await api.put(
-          `/application_status/${formData.id}`,
-          formData
-        );
+        await api.put(`/application_status/${formData.id}`, formData);
       } else {
-        await api.post(
-          "/application_status",
-          formData
-        );
+        await api.post("/application_status", formData);
       }
       resetForm();
       fetchStatus();
-      setShowEditModal(false); 
+      setShowEditModal(false);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
   const handleEdit = (status) => {
-    setFormData(status); 
+    setFormData(status);
     setIsEditing(true);
-    setShowEditModal(true); 
+    setShowEditModal(true);
   };
 
   const handleDelete = async () => {
     try {
-      await api.delete(
-        `/application_status/${deleteId}`
-      );
+      await api.delete(`/application_status/${deleteId}`);
       fetchStatus();
       setShowDeleteModal(false);
     } catch (error) {
@@ -141,10 +124,13 @@ const handleFocus=(field)=>{
                           value={formData.status}
                           onChange={handleChange}
                           placeholder="Enter Status"
-                          onFocus={()=>handleFocus('status')}
+                          onFocus={() => handleFocus("status")}
                         />
-                        {Error.status && <p style={{ color: "red", fontSize: "11px" }}>{Error.status}</p>}
-
+                        {Error.status && (
+                          <p style={{ color: "red", fontSize: "11px" }}>
+                            {Error.status}
+                          </p>
+                        )}
                       </div>
                       <div className="mt-5 col-xl-4">
                         <button className="btn btn-purple-gradient">
@@ -220,16 +206,13 @@ const handleFocus=(field)=>{
         <div className="modal-backdrop fade show"></div>
       )}
 
-      {/* <!-- Modal Edit --> */}
       {showEditModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-header">
-                <h6 className="modal-title">
-                Edit Application Status
-              </h6>
-              <button
+                <h6 className="modal-title">Edit Application Status</h6>
+                <button
                   type="button"
                   className="btn-close"
                   onClick={() => {
@@ -237,14 +220,12 @@ const handleFocus=(field)=>{
                     resetForm();
                   }}
                 ></button>
-            </div>
-            <div class="modal-body">
-              <div class="row gy-3">
-                <div class="col-xl-8 col-md-8">
-                  <label class="form-label">
-                    Application Status
-                  </label>
-                  <input
+              </div>
+              <div class="modal-body">
+                <div class="row gy-3">
+                  <div class="col-xl-8 col-md-8">
+                    <label class="form-label">Application Status</label>
+                    <input
                       type="text"
                       className="form-control"
                       name="status"
@@ -252,11 +233,11 @@ const handleFocus=(field)=>{
                       onChange={handleChange}
                       placeholder="Enter Status"
                     />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="modal-footer">
-              <button
+              <div className="modal-footer">
+                <button
                   type="button"
                   className="btn btn-purple-gradient"
                   onClick={handleSubmit}
@@ -274,12 +255,11 @@ const handleFocus=(field)=>{
                   Close
                 </button>
               </div>
+            </div>
           </div>
         </div>
-      </div>
       )}
 
-      {/* <!-- Modal Delete --> */}
       {showDeleteModal && (
         <div className="modal show d-block">
           <div className="modal-dialog modal-dialog-centered">
