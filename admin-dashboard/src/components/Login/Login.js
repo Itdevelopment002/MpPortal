@@ -94,7 +94,7 @@ const Login = ({ onLogin }) => {
                 <label className="mb-2 label1">Username</label>
                 <input
                   type="text"
-                  className="form-control form-control1"
+                  className="form-control form-control1 "
                   name="username"
                   value={userData.username}
                   onChange={handleChange}

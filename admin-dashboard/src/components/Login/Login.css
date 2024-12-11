@@ -1,6 +1,6 @@
 .login-page {
   height: 100vh;
-  background-image: url("../../assets/img/login/Untitled\ design.png");
+  background-image: url("../../assets/img/login/loginbg.png");
   background-size: cover; 
   background-position: center;
   background-repeat: no-repeat;
@@ -31,6 +31,7 @@
   color: #323232;
   font-size: 14px;
   font-weight: normal;
+  font-weight: 600;
 }
 
 .form-container1 {
@@ -63,6 +64,7 @@
   box-shadow: inherit;
   font-size: 14px;
   height: 40px;
+  background-color:rgb(243, 247, 252);
 }
 
 .button-container {
