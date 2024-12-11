@@ -83,14 +83,22 @@ const Login = () => {
       setErrors(validationErrors);
       return;
     }
+  
     try {
-      await api.post("/login", userData);
+      // Make the login request
+      const response = await api.post("/login", userData);
+  
+      // Extract user data from the response
+      const { username, name, user_permission } = response.data.user;
+  
+      // Set values in localStorage
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem(
         "user",
-        JSON.stringify({ username: userData.username })
+        JSON.stringify({ username, name, user_permission })
       );
-
+  
+      // Show success notification and navigate to the dashboard
       Swal.fire({
         icon: "success",
         title: "Success!",
@@ -102,9 +110,11 @@ const Login = () => {
         navigate("/dashboard");
       });
     } catch (err) {
+      // Show error message on failure
       alert(err.response?.data?.msg || "An error occurred during login");
     }
   };
+  
 
   const onSubmit = (e) => {
     e.preventDefault();

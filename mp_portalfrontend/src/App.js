@@ -30,16 +30,25 @@ import AddTaluka from './components/AddTaluka/AddTaluka';
 
 function Layout({ children }) {
   const location = useLocation();
-  
+
   // Check if the user is logged in
   const isLoggedIn = localStorage.getItem("isLoggedIn");
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const { user_permission } = user;
+  console.log(user_permission);
 
   // List of protected routes
-  const protectedRoutes = [
+  const userRoutes = [
     '/dashboard',
     '/add-new-entry',
-    '/scan-gallary',
     '/add-new-grievance',
+  ];
+
+  const adminRoutes = [
+    '/dashboard',
+    '/add-new-entry',
+    '/add-new-grievance',
+    '/scan-gallary',
     '/all-grievance-list',
     '/completed-grievance',
     '/in-progress-grievance',
@@ -53,12 +62,17 @@ function Layout({ children }) {
     '/add-whatsapp-group',
     '/add-user',
     '/view-application/:id',
-    '/edit-application/:id'
+    '/edit-application/:id',
   ];
 
-  // If the user is not logged in and they are trying to access a protected route, redirect to login
+  const protectedRoutes = user_permission === "User" ? userRoutes : adminRoutes;
+
   if (!isLoggedIn && protectedRoutes.includes(location.pathname)) {
     return <Navigate to="/login" />;
+  }
+
+  if (isLoggedIn && !protectedRoutes.includes(location.pathname)) {
+    return <Navigate to="/dashboard" />;
   }
 
   const getLayout = () => {
@@ -67,7 +81,7 @@ function Layout({ children }) {
     switch (path) {
       case '/login':
         return <>{children}</>;
-      case '/':  // Default root path
+      case '/': // Default root path
         return (
           <>
             <Header />
@@ -75,13 +89,13 @@ function Layout({ children }) {
             <Footer />
           </>
         );
-      default:  // Admin-related routes
+      default: // Protected routes with admin or user layouts
         return (
           <>
             <HeaderAdmin />
             <div className="d-flex" style={{ minHeight: '100vh', flexDirection: 'column' }}>
               <div className="d-flex flex-grow-1">
-                <Sidebar />
+                <Sidebar user={user_permission} />
                 <div className="content-wrapper flex-grow-1">{children}</div>
               </div>
               <FooterAdmin />
