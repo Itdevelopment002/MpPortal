@@ -19,9 +19,14 @@ router.post("/", generateUniqueId, (req, res) => {
     }
 
     if (result.length > 0) {
+      const user = result[0]; 
       res.json({
         message: "Login successful",
-        user: result[0],
+        user: {
+          username: user.username,
+          name: user.name,
+          user_permission: user.user_permission,
+        },
         uniqueId: req.uniqueId,
       });
     } else {

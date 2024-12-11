@@ -17,14 +17,18 @@ const HeaderAdmin = () => {
     ? notifications
     : notifications.slice(0, 5);
   const navigate = useNavigate();
-  const [username, setUsername] = useState("Guest");
+  const [name, setName] = useState("Guest");
+  const [designation, setDesignation] = useState("");
 
   useEffect(() => {
     const storedUser = JSON.parse(
       localStorage.getItem("user") || sessionStorage.getItem("user")
     );
-    if (storedUser && storedUser.username) {
-      setUsername(storedUser.username);
+    if (storedUser && storedUser.name) {
+      setName(storedUser.name);
+    }
+    if (storedUser && storedUser.user_permission) {
+      setDesignation(storedUser.user_permission);
     }
   }, []);
 
@@ -313,9 +317,9 @@ const HeaderAdmin = () => {
             >
               <li>
                 <div class="dropdown-item text-center border-bottom">
-                  <span>{username || "Guest"}</span>
+                  <span>{name || "Guest"}</span>
                   <span className="d-block fs-12 text-muted">
-                    {username?.designation || "Designation"}
+                    {designation || "Designation"}
                   </span>
                 </div>
               </li>
