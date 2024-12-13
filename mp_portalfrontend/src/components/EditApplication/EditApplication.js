@@ -504,7 +504,6 @@ const EditApplication = () => {
           </div>
         </div>
       </div>
-      <FooterAdmin />
     </>
   );
 };

@@ -38,10 +38,11 @@ function Layout({ children }) {
   console.log(user_permission);
 
   // List of protected routes
-  const userRoutes = [
+  const clerkRoutes = [
     '/dashboard',
     '/add-new-entry',
-    '/add-new-grievance',
+    '/scan-gallary',
+    '/add-new-grievance'
   ];
 
   const adminRoutes = [
@@ -65,7 +66,7 @@ function Layout({ children }) {
     '/edit-application/:id',
   ];
 
-  const protectedRoutes = user_permission === "User" ? userRoutes : adminRoutes;
+  const protectedRoutes = user_permission === "Clerk" ? clerkRoutes : adminRoutes;
 
   if (!isLoggedIn && protectedRoutes.includes(location.pathname)) {
     return <Navigate to="/login" />;
