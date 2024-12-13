@@ -6,16 +6,30 @@
 }
 
 .main-sidebar {
+  background-color: #202947;
+  font-size: 17px;
   margin-block-start: 4.25rem;
   padding-block-start: 0.5rem;
   padding-block-end: 5rem;
   position: sticky;
   top: 0;
   box-shadow: 6px 0px 16px 0px rgba(0, 0, 0, 0.05);
-  background-color: #202947;
-  font-size: 17px;
   max-height: 100vh;
 }
+
+@media (max-width: 991.98px) {
+
+  .main-sidebar {
+      background-color: #202947 !important;
+      font-size: 17px !important;
+      margin-block-start: 0rem !important;
+      padding-block-start: 0rem !important;
+      padding-block-end: 0rem !important;
+      max-height: 100vh !important;
+  }
+}
+
+
 
 .main-sidebar.no-scroll {
   overflow-y: hidden;
@@ -58,33 +72,40 @@
   color: #ffffff !important;
   font-weight: 600;
 }
+
 .main-menu .slide .side-menu__icon.active {
   background-color: transparent !important;
   color: #ffffff !important;
   font-weight: 600;
 }
+
 .main-menu .slide .child1 .slider-child.active {
   background-color: transparent !important;
   color: #ffffff !important;
   font-weight: 600;
 }
 
+
 .main-menu .slide .side-menu__item:hover .side-menu__icon {
   color: #ffffff;
+
 }
 
 .main-menu .slide .side-menu__item:hover .side-menu__label {
   color: #ffffff;
+
 }
 
 .main-menu .slide .slide-menu.child1 .side-menu__item:hover {
   color: #ffffff;
+
 }
 
 .app-sidebar .slide {
   margin: 0;
   padding: 0.2rem 0.5rem;
 }
+
 
 .sidebar {
   transition: visibility 0.3s ease-in-out;

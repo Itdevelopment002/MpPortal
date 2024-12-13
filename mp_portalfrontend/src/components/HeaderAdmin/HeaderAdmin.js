@@ -166,10 +166,7 @@ const HeaderAdmin = () => {
                 id="autoSizingSelect"
                 onChange={handleLanguageChange}
               >
-                <option value="" selected>
-                  Select Language
-                </option>
-                <option value="en">English</option>
+                <option value="en" selected>English</option>
                 <option value="mr">Marathi</option>
                 <option value="hi">Hindi</option>
               </select>
@@ -228,9 +225,8 @@ const HeaderAdmin = () => {
                   notificationsToShow.map((notification, index) => (
                     <li
                       key={index}
-                      className={`dropdown-item ${
-                        notification.readed === 0 ? "bg-light-blue" : ""
-                      }`}
+                      className={`dropdown-item ${notification.readed === 0 ? "bg-light-blue" : ""
+                        }`}
                       onClick={() => handleMarkAsRead(notification.id)}
                       style={{ padding: "10px 15px" }}
                     >

@@ -297,8 +297,8 @@ const AddUser = () => {
                           onFocus={() => handleFocus("user_permission")}
                         >
                           <option value="">Select user permission</option>
-                          <option value="User">User</option>
                           <option value="Admin">Admin</option>
+                          <option value="Clerk">Clerk</option>
                         </select>
                         {Error.user_permission && (
                           <p style={{ color: "red", fontSize: "11px" }}>
@@ -502,8 +502,9 @@ const AddUser = () => {
                       onChange={handleChange}
                       required
                     >
-                      <option value="User">User</option>
                       <option value="Admin">Admin</option>
+                      <option value="Clerk">Clerk</option>
+
                     </select>
                   </div>
                   <div class="col-xl-6 col-md-6">
