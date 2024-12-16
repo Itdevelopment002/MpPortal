@@ -35,7 +35,6 @@ function Layout({ children }) {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const user = JSON.parse(localStorage.getItem("user")) || {};
   const { user_permission } = user;
-  console.log(user_permission);
 
   // List of protected routes
   const clerkRoutes = [
@@ -63,26 +62,28 @@ function Layout({ children }) {
     '/add-whatsapp-group',
     '/add-user',
     '/view-application/:id',
-    '/edit-application/:id',
+    '/edit-application/:id'
   ];
 
   const protectedRoutes = user_permission === "Clerk" ? clerkRoutes : adminRoutes;
 
-  if (!isLoggedIn && protectedRoutes.includes(location.pathname)) {
+  // Handle protected routes
+  if (!isLoggedIn && protectedRoutes.some(route => location.pathname.startsWith(route.split('/:')[0]))) {
     return <Navigate to="/login" />;
   }
 
-  if (isLoggedIn && !protectedRoutes.includes(location.pathname)) {
+  if (isLoggedIn && !protectedRoutes.some(route => location.pathname.startsWith(route.split('/:')[0]))) {
     return <Navigate to="/dashboard" />;
   }
 
   const getLayout = () => {
     const path = location.pathname;
+    const isEditOrViewApplication = path.startsWith('/edit-application/') || path.startsWith('/view-application/');
 
-    switch (path) {
-      case '/login':
+    switch (true) {
+      case path === '/login':
         return <>{children}</>;
-      case '/': // Default root path
+      case path === '/': // Default root path
         return (
           <>
             <Header />
@@ -97,7 +98,9 @@ function Layout({ children }) {
             <div className="d-flex" style={{ minHeight: '100vh', flexDirection: 'column' }}>
               <div className="d-flex flex-grow-1">
                 <Sidebar user={user_permission} />
-                <div className="content-wrapper flex-grow-1">{children}</div>
+                <div className={`content-wrapper flex-grow-1 ${isEditOrViewApplication ? '' : ''}`}>
+                  {children}
+                </div>
               </div>
               <FooterAdmin />
             </div>
