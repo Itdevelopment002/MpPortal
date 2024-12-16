@@ -3,9 +3,9 @@ const mysql = require('mysql');
 
 const db = mysql.createConnection({
     host:"127.0.0.1",
-    user:"root",
-    password:"",
-    database:"genicminds_mp_portal"
+    user:"genicminds_mp_portal_new",
+    password:"Kh*)4yK+gPIr",
+    database:"genicminds_mp_portal_new"
 });
 
 db.connect((err) => {
