@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { useParams } from "react-router-dom";
 import api from "../../api";
-import HeaderAdmin from "../HeaderAdmin/HeaderAdmin";
-import Sidebar from "../Sidebar/Sidebar";
+// import HeaderAdmin from "../HeaderAdmin/HeaderAdmin";
+// import Sidebar from "../Sidebar/Sidebar";
 
-import FooterAdmin from "../FooterAdmin/FooterAdmin";
+// import FooterAdmin from "../FooterAdmin/FooterAdmin";
 
 const ViewApplication = () => {
   const { id } = useParams();
@@ -49,8 +49,8 @@ const ViewApplication = () => {
 
   return (
     <>
-      <HeaderAdmin />
-      <Sidebar />
+      {/* <HeaderAdmin />
+      <Sidebar /> */}
       <div class="main-content app-content">
         <div class="container-fluid">
           <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
@@ -230,7 +230,7 @@ const ViewApplication = () => {
           </div>
         </div>
       </div>
-      <FooterAdmin />
+      {/* <FooterAdmin /> */}
     </>
   );
 };

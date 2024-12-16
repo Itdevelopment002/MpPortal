@@ -6,9 +6,9 @@ import api from "../../api";
 import { AiOutlineCalendar } from "react-icons/ai";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import HeaderAdmin from "../HeaderAdmin/HeaderAdmin";
-import Sidebar from "../Sidebar/Sidebar";
-import FooterAdmin from "../FooterAdmin/FooterAdmin";
+// import HeaderAdmin from "../HeaderAdmin/HeaderAdmin";
+// import Sidebar from "../Sidebar/Sidebar";
+// import FooterAdmin from "../FooterAdmin/FooterAdmin";
 import Swal from "sweetalert2";
 
 const formatDate = (date) => {
@@ -173,8 +173,8 @@ const EditApplication = () => {
   }
   return (
     <>
-      <HeaderAdmin />
-      <Sidebar />
+      {/* <HeaderAdmin /> */}
+      {/* <Sidebar /> */}
       <div class="main-content app-content">
         <div class="container-fluid">
           <div class="d-flex align-items-center justify-content-between page-header-breadcrumb flex-wrap gap-2">
